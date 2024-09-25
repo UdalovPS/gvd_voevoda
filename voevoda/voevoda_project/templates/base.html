@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}  <!-- в Django статика подгружается таким образом. Подгружается она 1 раз в базовом шаблоне-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voevoda APP</title>
+</head>
+<body>
+    <!-- Проверяем авторизован ли пользователь
+     Внутрь каждого шаблона если пользователь авторизован передается объект
+     session = {
+        voevoda_id: int (целочисленное значение),
+        name: str (строковое значение),
+        clan_id: int (целочисленное значение),
+        sub_person_id: int (целочисленное значение)
+     }
+     Если данные значения есть в шаблоне, то система считает что пользователь
+     авторизован и рендерит содержание блока который был вызван
+     -->
+    {% if request.session.voevoda_id %}
+        <div>Пользователь авторизован</div>
+        {% block content %}
+        <!-- Здесь будет код конкретной страницы -->
+        {% endblock %}
+    {% else %}
+        <!-- Ситуация когда пользователь не авторизован. Тут он проходит авторизацию через JS код-->
+        <div>Пользователь не авторизован</div>
+        <form id="access_code_form">
+            <label> Ваше имя: <input type="text" id="name" placeholder="Имя"></input></label>
+            <button type="submit" id="generate_access_code_btn">Отправить</button>
+        </form>
+        <form id="validate_code_form" style="display: none;">
+            <label> Код доступа: <input type="text" id="code" placeholder="Код"></input></label>
+            <button type="submit" id="validate_access_code_btn">Отправить код</button>
+        </form>
+    {% endif %}
+</body>
+<!-- Загружаем JS код в страницу уже после того, как все отобразили-->
+<script type="text/javascript" src={% static "voevoda_app/js/script.js" %}></script>
+</html>

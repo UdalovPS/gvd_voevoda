@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <div>MAIN</div>
+        <!--
+                Для наполнения страницы контентом нужно сделать несколько API запросов
+                1.
+                        url: http://127.0.0.1:8000/api/clans/
+                        type: GET
+                        params: clan_id=request.session.clan_id - данный параметр можно в JS вытянуть, мне GPT показывал как
+
+                        МОЕ API всегда отвечает шаблонно
+                        {
+                                success: true или false - по данному полю можно понять успешно или нет
+                                data: сами данные которые пришли (если success == false, то data будет пустая)
+                        }
+
+                        data: {
+                                "id": Целочисленное значение,
+                                "name": Строковое значение,
+                                "label": url адрес гифки, которую нужно отрендерить + под гифку спрятать ссылку https://www.heroeswm.ru/clan_info.php?id=[ID из поля выше],
+                                "alliance": null или {
+                                        "id": Целочисленное значение,
+                                        "name": Строковое значение,
+                                        "label": url адрес гифки, которую нужно отрендерить + под гифку спрятать ссылку https://www.heroeswm.ru/clan_info.php?id=[ID из поля выше]
+                                 }
+                        }
+                        Полученные данные нужно отрендерить. При нажатии на ИМЯ (название клана). Нужно переходить на вкладку clan (href переход на нее есть ниже)
+                        но при этом к запросу прибавляется параметр clan_id == [ID из поля выше]
+        -->
+        <div class="url_box">
+                <a href="{% url 'presents' %}" >Пресеты</a>
+        </div>
+        <div class="url_box">
+                <a href="{% url 'clan' %}?my=true" >Клан</a>
+        </div>
+        <div class="url_box">
+                <a href="{% url 'players' %}" >Игроки</a>
+        </div>
+        <div class="url_box">
+                <a href="{% url 'event' %}" >Ивенты</a>
+        </div>
+        <div class="url_box">
+                <a href="{% url 'fight' %}" >История боев</a>
+        </div>
+{% endblock %}
