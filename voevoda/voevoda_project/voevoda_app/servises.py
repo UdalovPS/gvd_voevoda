@@ -109,13 +109,25 @@ class ClansLogic:
         try:
             data = ClansModel.objects.get(pk=clan_id)
             logger.info(f"Извлеченные данные о клане: №{data.id} {data.name}. Альянс с: {data.alliance}")
-            return {"id": data.id, "name": data.name, "label": data.label, "alliance": self.get_clan_data_wuthout_alliance(data.alliance)}
+            return {"id": data.id, "name": data.name, "label": data.label, "alliance": self.get_clan_data_without_alliance(data.alliance)}
         except ObjectDoesNotExist:
             logger.error(f"Не найден клан с ID: {clan_id}")
             return None
 
+    def get_clan_data_by_name(self, clan_name: str):
+        """Извлечение данных клана по имени без учета регистра"""
+        try:
+            data = ClansModel.objects.filter(Q(name__icontains=clan_name))
+            return [
+                {"id": one_data.id, "name": one_data.name, "label": one_data.label, "alliance": self.get_clan_data_without_alliance(one_data.alliance)}
+                for one_data in data
+            ]
+        except ObjectDoesNotExist:
+            logger.error(f"Не найден клан с name: {clan_name}")
+            return None
+
     @staticmethod
-    def get_clan_data_wuthout_alliance(alliance_data: Union[ClansModel, None]):
+    def get_clan_data_without_alliance(alliance_data: Union[ClansModel, None]):
         if alliance_data is None:
             return None
         else:

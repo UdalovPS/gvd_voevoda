@@ -110,11 +110,41 @@ class Event(View):
         )
 
 
-class Fight(View):
+class Fights(View):
     def get(self, request):
         return render(
             request=request,
+            template_name="voevoda_app_render/fights.html",
+        )
+
+
+class Fight(View):
+    def get(self, request):
+
+        fight_id = request.GET.get('fight_id')
+        voevoda_id = request.session.get("voevoda_id")
+
+        presets_data = requests.get(
+            url="http://127.0.0.1:8000/api/presets/",
+            params={voevoda_id: "voevoda_id"}
+        ).json()
+
+        if fight_id and voevoda_id:
+            fight_data = requests.get(
+                url="http://127.0.0.1:8000/api/fights/",
+                params={"fight_id": fight_id, voevoda_id: "voevoda_id"}
+            ).json()
+            if fight_data["success"]:
+                if fight_data["data"]["voevoda_id"] == int(voevoda_id):
+                    return render(
+                        request=request,
+                        template_name="voevoda_app_render/fight.html",
+                        context={"fight_data": fight_data["data"], "presets_data": presets_data["data"]}
+                    )
+        return render(
+            request=request,
             template_name="voevoda_app_render/fight.html",
+            context={"presets_data": presets_data["data"]}
         )
 
 

@@ -16,9 +16,13 @@ class ClansView(View):
     @staticmethod
     def get(request, *args, **kwargs):
         clan_id = request.GET.get('clan_id')
+        clan_name = request.GET.get('clan_name')
 
         obj = ClansLogic()
-        data = obj.get_clan_data(clan_id=clan_id)
+        if clan_id:
+            data = obj.get_clan_data(clan_id=clan_id)
+        else:
+            data = obj.get_clan_data_by_name(clan_name=clan_name)
         if data:
             return JsonResponse(data={"success": True, "data": data}, status=200)
         else:

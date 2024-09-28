@@ -11,4 +11,6 @@ urlpatterns = [
     path("person/", views.Person.as_view(), name='person'),
     path("presets/", views.Presets.as_view(), name='presents'),
     path("preset/", views.Preset.as_view(), name='present'),
+    path("fights/", views.Fights.as_view(), name='fights'),
+    path("fight/", views.Fight.as_view(), name='fight'),
 ]
