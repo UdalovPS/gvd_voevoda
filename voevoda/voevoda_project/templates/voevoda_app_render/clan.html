@@ -1,86 +1,150 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Клан</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background: url("https://example.com/background.jpg") no-repeat center center fixed; /* Замените на ваш фон */
+        background-size: cover;
+        color: #fff;
+        margin: 0;
+        padding: 20px;
+      }
+      .clan-info {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        margin-bottom: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: #ffd700; /* Золотой цвет для заголовка */
+      }
+      h2 {
+        color: #4caf50;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный фон для таблицы */
+        color: #fff; /* Белый цвет текста в таблице */
+      }
+      th,
+      td {
+        border: 1px solid #fff;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background-color: rgba(255, 215, 0, 0.2); /* Золотистый фон для заголовков */
+      }
+      tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.1); /* Полупрозрачный белый для четных строк */
+      }
+      tr:hover {
+        background: rgba(255, 255, 255, 0.2); /* Эффект при наведении */
+      }
+      a {
+        color: #f5deb3; /* Бежевый цвет для ссылок */
+        text-decoration: none; /* Убираем подчеркивание */
+      }
+      a:hover {
+        text-decoration: underline; /* Подчеркивание при наведении */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="clan-info">
+      <h1>Клан: {{ clan_id }}</h1>
+      <div id="clan-name"></div>
+      <div id="clan-label"></div>
+      <div id="clan-alliance"></div>
+    </div>
+    <h2>Игроки</h2>
+    <table id="players-table">
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Уровень</th>
+          <th>Гильдия (Карты)</th>
+          <th>Гильдия (Работы)</th>
+          <th>Гильдия (Охота)</th>
+          <th>Ремесло (Кузнец)</th>
+          <th>Ремесло (Ловец)</th>
+          <th>Ремесло (Лидер)</th>
+        </tr>
+      </thead>
+      <tbody id="players"></tbody>
+    </table>
 
-{% block content %}
-        <div>CLAN {{clan_id}}</div>
-        {{ my }}
-        <!--
-                {{clan_id}} в данной переменной
-                1)Делаем запрос для получения данных клана
-                        url: http://127.0.0.1:8000/api/clans/
-                        type: GET
-                        params: clan_id={{ clan_id }}
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const clanId = "{{ clan_id }}"; // Получаем clan_id из шаблона
 
-                        ОТВЕТ:
-                        data: {
-                                "id": Целочисленное значение,
-                                "name": Строковое значение,
-                                "label": url адрес гифки, которую нужно отрендерить + под гифку спрятать ссылку https://www.heroeswm.ru/clan_info.php?id=[ID из поля выше],
-                                "alliance": null или {
-                                        "id": Целочисленное значение,
-                                        "name": Строковое значение,
-                                        "label": url адрес гифки, которую нужно отрендерить + под гифку спрятать ссылку https://www.heroeswm.ru/clan_info.php?id=[ID из поля выше]
-                                 }
-                        }
-                 2)Запрашиваем список всех игроков данного клана
-                        url: http://127.0.0.1:8000/api/players/
-                        type: GET
-                        params: clan_id={{ clan_id }}
+        try {
+          // Запрос на получение данных о клане
+          const response = await fetch(`http://127.0.0.1:8000/api/clans/?clan_id=${clanId}`);
 
-                        ОТВЕТ:
-                        data: [
-                                {
-                                    "id": целочисленное значение,
-                                    "name": строковое значение, спрятать ссылку https://www.heroeswm.ru/pl_info.php?id=[ID из поля выше],
-                                    "level": целочисленное значение,
-                                    "clan": целочисленное значение, - его отображать не нужно
-                                    "umka_knight": целочисленное значение,
-                                    "umka_necro": целочисленное значение,
-                                    "umka_mag": целочисленное значение,
-                                    "umka_elf": целочисленное значение,
-                                    "umka_barbar": целочисленное значение,
-                                    "umka_black_elf": целочисленное значение,
-                                    "umka_demon": целочисленное значение,
-                                    "umka_dwarf": целочисленное значение,
-                                    "umka_step_barb": целочисленное значение,
-                                    "umka_pharaon": целочисленное значение,
-                                    "gild_hunt": целочисленное значение,
-                                    "gild_work": целочисленное значение,
-                                    "gild_card": целочисленное значение,
-                                    "gild_thief": целочисленное значение,
-                                    "gild_ranger": целочисленное значение,
-                                    "gild_mers": целочисленное значение,
-                                    "gild_tactic": целочисленное значение,
-                                    "gild_gard": целочисленное значение,
-                                    "gild_seekers": целочисленное значение,
-                                    "gild_leader": целочисленное значение,
-                                    "gild_blacksmith": целочисленное значение,
-                                    "gild_gunsmith": целочисленное значение
-                                    "person_id": целочисленное значение (мы смотрим на переменную {{ my }}. Если она true
-                                    и person_id == null, то делаем кнопку "ПРИГЛАСИТЬ"
-                                    при нажатии на кнопку "ПРИГЛАСИТЬ" отправляем запрос
-                                        url = "http://127.0.0.1:8000/api/keys/"
-                                        type: GET
-                                        params = {
-                                                "sub_key": "person",
-                                                "role": 100,
-                                                "player_id": "id",
-                                                "voevoda_id": request.session.voevoda_id
-                                        }
+          if (!response.ok) {
+            throw new Error("Ошибка сети: " + response.statusText);
+          }
 
-                                        ОТВЕТ:
-                                        в data прийдет 6-значный код, который нужно вывести на экран
+          const clanData = await response.json();
+          console.log(clanData); // Обработка данных о клане
 
-                                    если значение person_id,
-                                    то там ссылка, которая ведет на "{% url 'player' %}?player_id=4"
+          // Выводим информацию о клане на страницу
+          document.getElementById("clan-name").textContent = `Название: ${clanData.data.name}`;
+          document.getElementById("clan-label").innerHTML = `<img src="${clanData.data.label}" alt="Гифка клана">`;
+          if (clanData.data.alliance) {
+            document.getElementById("clan-alliance").innerHTML = `
+                        Альянс: ${clanData.data.alliance.name} <br>
+                        <img src="${clanData.data.alliance.label}" alt="Гифка альянса">
+                        <a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.data.alliance.id}">Подробнее</a>
+                    `;
+          } else {
+            document.getElementById("clan-alliance").textContent = "Альянс: Нет";
+          }
 
-                                    если же переменная {{ my }} равна false, то ничего не делаем
+          // Запрос на получение игроков
+          const playersResponse = await fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}`);
 
-                                },
-                        ]
-                        Рендерим данные о клане. Рендерим кол-во игроков. Рендерим таблицу с игроками и фильтруем по убывания по
-                        переменной level
-        -->
-        <div class="url_box">
-                <a href="{% url 'player' %}?player_id=4" >Игрок</a>
-        </div>
+          if (!playersResponse.ok) {
+            throw new Error("Ошибка сети: " + playersResponse.statusText);
+          }
+
+          const playersData = await playersResponse.json();
+          console.log(playersData); // Обработка данных о игроках
+
+          // Сортировка игроков по уровню по убыванию
+          playersData.data.sort((a, b) => b.level - a.level);
+
+          // Выводим игроков на страницу
+          const playersTableBody = document.getElementById("players");
+          playersData.data.forEach((player) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td><a href="{% url 'player' %}?player_id=${player.id}">${player.name}</a></td>
+                        <td>${player.level}</td>
+                        <td>${player.gild_card}</td>
+                        <td>${player.gild_work}</td>
+                        <td>${player.gild_hunt}</td>
+                        <td>${player.gild_blacksmith}</td>
+                        <td>${player.gild_gunsmith}</td>
+                        <td>${player.gild_leader}</td>
+                    `;
+            playersTableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Ошибка при выполнении запроса:", error);
+        }
+      });
+    </script>
+  </body>
+</html>
 {% endblock %}
