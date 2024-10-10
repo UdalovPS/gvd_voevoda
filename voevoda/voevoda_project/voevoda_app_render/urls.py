@@ -13,4 +13,5 @@ urlpatterns = [
     path("preset/", views.Preset.as_view(), name='present'),
     path("fights/", views.Fights.as_view(), name='fights'),
     path("fight/", views.Fight.as_view(), name='fight'),
+    path("events/", views.Events.as_view(), name="events")
 ]

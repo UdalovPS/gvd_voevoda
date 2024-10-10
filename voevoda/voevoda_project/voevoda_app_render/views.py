@@ -8,6 +8,36 @@ import requests
 
 # Create your views here.
 
+
+class Events(View):
+    def get(self, request):
+        return render(
+            request=request,
+            template_name="voevoda_app_render/events.html",
+        )
+
+class Event(View):
+    def get(self, request):
+        event_id = request.GET.get('event_id')
+        voevoda_id = request.session.get("voevoda_id")
+        if event_id and voevoda_id:
+            event_data = requests.get(
+                url="http://127.0.0.1:8000/api/events/",
+                params={"event_id": event_id}
+            ).json()
+            if event_data["success"]:
+                if event_data["data"]["voevoda_id"] == int(voevoda_id):
+                    return render(
+                        request=request,
+                        template_name="voevoda_app_render/event.html",
+                        context={"event_data": event_data["data"]}
+                    )
+        return render(
+            request=request,
+            template_name="voevoda_app_render/event.html",
+        )
+
+
 class Main(View):
     def get(self, request):
         code = request.GET.get('code')
@@ -123,6 +153,7 @@ class Fight(View):
 
         fight_id = request.GET.get('fight_id')
         voevoda_id = request.session.get("voevoda_id")
+        event_id = request.GET.get("event_id")
 
         presets_data = requests.get(
             url="http://127.0.0.1:8000/api/presets/",
@@ -144,7 +175,7 @@ class Fight(View):
         return render(
             request=request,
             template_name="voevoda_app_render/fight.html",
-            context={"presets_data": presets_data["data"]}
+            context={"presets_data": presets_data["data"], "event_id": event_id}
         )
 
 

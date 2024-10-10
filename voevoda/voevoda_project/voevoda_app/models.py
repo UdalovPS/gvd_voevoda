@@ -218,6 +218,7 @@ class InviteModel(models.Model):
         (1, "Отправлено"),
         (2, "Принято"),
         (3, "Отказ"),
+        (4, "Выбран на бой"),
     ]
 
     id = models.AutoField(primary_key=True)
