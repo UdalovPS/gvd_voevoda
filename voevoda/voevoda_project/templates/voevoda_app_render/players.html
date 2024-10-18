@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div>PAYERS</div>
+        <div>PLAYERS</div>
         <!--
                 1)Запрашиваем список всех всех живых игроков относящихся к данному воеводе
                       url: http://127.0.0.1:8000/api/persons/
@@ -71,7 +71,102 @@
                       ]
 
            -->
-        <div class="url_box">
-                <a href="{% url 'player' %}?player_id=4" >Игрок</a>
-        </div>
+
+    <table id="players-table">
+        <thead>
+            <tr>
+                <th>Роль</th>
+                <th>Telegram username</th>
+                <th>Активность</th>
+                <th>Комментарий</th>
+                <th>Статистика игрока</th>
+                <th>Пресеты</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleMap = {
+                1: "Воевода",
+                2: "Помощник воеводы",
+                100: "Игрок"
+            };
+            const fractionMap = {
+                0: "Рыцарь",
+                1: "Некромант",
+                2: "Маг",
+                3: "Эльф",
+                4: "Варвар",
+                5: "Темный эльф",
+                6: "Демон",
+                7: "Гном",
+                8: "Степной варвар",
+                9: "Фараон"
+            };
+
+            fetch(`http://127.0.0.1:8000/api/persons/?voevoda_id={{ request.session.voevoda_id }}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && Array.isArray(data.data)) {
+                        const playersData = data.data;
+
+                        const tableBody = document.querySelector('#players-table tbody');
+                        playersData.forEach(player => {
+                            const row = document.createElement('tr');
+                            const roleCell = document.createElement('td');
+                            const roleLink = document.createElement('a');
+                            roleLink.href = `{% url 'player' %}?player_id=${player.id}`;
+                            roleLink.textContent = roleMap[player.role] || 'Неизвестно';
+                            roleCell.appendChild(roleLink);
+                            row.appendChild(roleCell);
+
+                            const telegramCell = document.createElement('td');
+                            telegramCell.textContent = player.telegram_username || 'Неизвестно';
+                            row.appendChild(telegramCell);
+
+                            const activityCell = document.createElement('td');
+                            activityCell.textContent = player.activity ? '✔️' : '❌';
+                            row.appendChild(activityCell);
+
+                            const commentCell = document.createElement('td');
+                            commentCell.textContent = player.comment;
+                            row.appendChild(commentCell);
+
+                            const statsCell = document.createElement('td');
+                            statsCell.innerHTML = `
+                                <a href="https://www.heroeswm.ru/pl_info.php?id=${player.stats.id}">${player.stats.name}</a> (Уровень: ${player.stats.level})<br>
+                                Рыцарь: ${player.stats.umka_knight}, Некромант: ${player.stats.umka_necro}, Маг: ${player.stats.umka_mag},<br>
+                                Эльф: ${player.stats.umka_elf}, Варвар: ${player.stats.umka_barbar}, Тёмный эльф: ${player.stats.umka_black_elf},<br>
+                                Демон: ${player.stats.umka_demon}, Гном: ${player.stats.umka_dwarf}, Степной варвар: ${player.stats.umka_step_barb},<br>
+                                Фараон: ${player.stats.umka_pharaon}
+                            `;
+                            row.appendChild(statsCell);
+
+                            const presetsCell = document.createElement('td');
+                            console.log(player.presets);
+                            const presetsList = player.presets.map(preset => `
+                                <div>
+                                    <a href="{% url 'present' %}?preset_id=${preset.preset.id}">
+                                        ${fractionMap[preset.preset.fraction]} - ${preset.preset.name}
+                                    </a>
+                                    (${preset.play_preset ? '✔️' : '❌'})<br>
+                                    Описание: ${preset.preset.description}
+                                </div>
+                            `).join('');
+                            presetsCell.innerHTML = presetsList;
+                            row.appendChild(presetsCell);
+
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        console.error('Ошибка при получении данных о персонажах.');
+                    }
+                })
+                .catch(error => console.error('Ошибка запроса:', error));
+        });
+    </script>
+
 {% endblock %}

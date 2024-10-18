@@ -272,4 +272,154 @@
           "{% url 'fight' %}?event_id=[ID ивента]"
 
         -->
+
+    {% if not event_data %}
+        <form id="event-form">
+            <label for="event-name">Название:</label>
+            <input type="text" id="event-name" name="name">
+
+            <label for="event-type">Тип события:</label>
+            <select id="event-type" name="type">
+                <option value="1">Атака</option>
+                <option value="2">Защита</option>
+            </select>
+
+            <label for="event-date">Дата и время:</label>
+            <input type="datetime-local" id="event-date" name="date">
+
+            <label for="event-enemy">Враг:</label>
+            <input type="text" id="event-enemy" name="enemy" placeholder="Введите имя клана...">
+            <div id="enemy-details"></div>
+
+            <button type="button" id="create-event">Создать ивент</button>
+        </form>
+
+        <script>
+            let selectedEnemyId = null;
+            document.getElementById('event-enemy').addEventListener('input', function() {
+                const query = this.value;
+                if (query.length >= 3) {
+                    setTimeout(() => {
+                        fetch(`http://127.0.0.1:8000/api/clans?clan_name=${query}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const enemy = data[0];
+                                selectedEnemyId = enemy.id;
+                                document.getElementById('enemy-details').innerHTML = `
+                                    <img src="${enemy.label}" alt="Враг" />
+                                    <p>${enemy.name}</p>
+                                `;
+                            });
+                    }, 2000);
+                }
+            });
+
+            document.getElementById('create-event').addEventListener('click', function() {
+                const name = document.getElementById('event-name').value;
+                const type = document.getElementById('event-type').value;
+                const date = new Date(document.getElementById('event-date').value).getTime();
+
+                fetch('http://127.0.0.1:8000/api/events/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        voevoda_id: "{{ request.session.voevoda_id }}",
+                        name: name,
+                        type: type,
+                        date: date,
+                        enemy: selectedEnemyId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = `{% url 'event' %}?event_id=${data.id}`;
+                });
+            });
+        </script>
+
+    {% else %}
+        <div>
+            <h3>{{ event_data.name }}</h3>
+            <p>Тип:
+                {% if event_data.type == 1 %}
+                    Атака
+                {% elif event_data.type == 2 %}
+                    Защита
+                {% else %}
+                    Неизвестно
+                {% endif %}
+            </p>
+            <p>Дата: {{ event_data.date|date:"d.m.Y H:i" }}</p>
+            <p>Состояние:
+                {% if event_data.state == 1 %}
+                    Первоначальный сбор
+                {% elif event_data.state == 2 %}
+                    Выбор бойцов
+                {% elif event_data.state == 3 %}
+                    Идет бой
+                {% elif event_data.state == 4 %}
+                    Завершен
+                {% else %}
+                    Неизвестно
+                {% endif %}
+            </p>
+
+            {% if event_data.state == 1 %}
+                <div>
+                    <h4>Выберите игроков для приглашения</h4>
+                    <form id="invite-form">
+                        {% for person in persons %}
+                            <div>
+                                <input type="checkbox" id="person-{{ person.id }}" name="person" value="{{ person.id }}">
+                                <label for="person-{{ person.id }}">
+                                    {{ person.telegram_username }} -
+                                        {% if person.role == 1 %}
+                                            Воевода
+                                        {% elif person.role == 2 %}
+                                            Помощник воеводы
+                                        {% elif person.role == 100 %}
+                                            Игрок
+                                        {% else %}
+                                            Неизвестная роль
+                                        {% endif %}
+                                    <span>{{ person.stats.name }} ({{ person.stats.level }} уровень)</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                        <button type="button" id="send-invites">Отправить приглашения</button>
+                    </form>
+
+                    <script>
+                        document.getElementById('send-invites').addEventListener('click', function() {
+                            const selectedPersons = Array.from(document.querySelectorAll('input[name="person"]:checked'))
+                                .map(input => input.value);
+
+                            selectedPersons.forEach(personId => {
+                                fetch('http://127.0.0.1:8000/api/invites/', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        event_id: "{{ event_data.id }}",
+                                        person_id: personId
+                                    })
+                                });
+                            });
+
+                            fetch('http://127.0.0.1:8000/api/events/', {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    event_id: "{{ event_data.id }}",
+                                    state: 2
+                                })
+                            })
+                            .then(() => {
+                                window.location.href = `{% url 'event' %}?event_id={{ event_data.id }}`;
+                            });
+                        });
+                    </script>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}

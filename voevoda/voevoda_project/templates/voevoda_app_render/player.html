@@ -2,7 +2,6 @@
 
 {% block content %}
         <div>Player</div>
-        {{ player_data }} - тут спрятаны все значения
         <!--
             {
                 "id": целочисленное значение,
@@ -68,4 +67,88 @@
 
             и выходим на прошлую страницу
        -->
-{% endblock %}
+           {% if player_data.role == 1 %}
+               <div>Роль: Воевода</div>
+           {% elif player_data.role == 2 %}
+               <div>Роль: Помощник воеводы</div>
+           {% elif player_data.role == 100 %}
+               <div>Роль: Игрок</div>
+           {% else %}
+               <div>Роль: Неизвестно</div>
+           {% endif %}
+
+           <div>Telegram ID: {{ player_data.telegram_id }}</div>
+           <div>Telegram Username: {{ player_data.telegram_username }}</div>
+
+           <div>Активность: {{ player_data.activity|yesno:"✔,✘" }}</div>
+
+           <div>Комментарий: {{ player_data.comment }}</div>
+
+           <div>Имя игрока: {{ player_data.stats.name }}</div>
+           <div>Уровень: {{ player_data.stats.level }}</div>
+
+           <div>Рыцарь умка: {{ player_data.stats.umka_knight }}</div>
+           <div>Некромант умка: {{ player_data.stats.umka_necro }}</div>
+           <div>Маг умка: {{ player_data.stats.umka_mag }}</div>
+           <div>Эльф умка: {{ player_data.stats.umka_elf }}</div>
+           <div>Варвар умка: {{ player_data.stats.umka_barbar }}</div>
+           <div>Темный эльф умка: {{ player_data.stats.umka_black_elf }}</div>
+           <div>Демон умка: {{ player_data.stats.umka_demon }}</div>
+           <div>Гном умка: {{ player_data.stats.umka_dwarf }}</div>
+           <div>Степной варвар умка: {{ player_data.stats.umka_step_barb }}</div>
+           <div>Фараон умка: {{ player_data.stats.umka_pharaon }}</div>
+
+           <div>Гильдия охотников: {{ player_data.stats.gild_hunt }}</div>
+           <div>Гильдия рабочих: {{ player_data.stats.gild_work }}</div>
+           <div>Гильдия карт: {{ player_data.stats.gild_card }}</div>
+           <div>Гильдия воров: {{ player_data.stats.gild_thief }}</div>
+           <div>Гильдия следопытов: {{ player_data.stats.gild_ranger }}</div>
+           <div>Гильдия наемников: {{ player_data.stats.gild_mers }}</div>
+           <div>Гильдия тактиков: {{ player_data.stats.gild_tactic }}</div>
+           <div>Гильдия стражей: {{ player_data.stats.gild_gard }}</div>
+           <div>Гильдия искателей: {{ player_data.stats.gild_seekers }}</div>
+           <div>Гильдия лидеров: {{ player_data.stats.gild_leader }}</div>
+           <div>Гильдия кузнецов: {{ player_data.stats.gild_blacksmith }}</div>
+           <div>Гильдия оружейников: {{ player_data.stats.gild_gunsmith }}</div>
+
+           <h3>Пресеты</h3>
+           <ul>
+           {% for preset in player_data.presets %}
+               <li>
+                   {% if preset.preset.fraction == 0 %}
+                       Фракция: Рыцарь
+                   {% elif preset.preset.fraction == 1 %}
+                       Фракция: Некромант
+                   {% elif preset.preset.fraction == 2 %}
+                       Фракция: Маг
+                   {% elif preset.preset.fraction == 3 %}
+                       Фракция: Эльф
+                   {% elif preset.preset.fraction == 4 %}
+                       Фракция: Варвар
+                   {% elif preset.preset.fraction == 5 %}
+                       Фракция: Темный эльф
+                   {% elif preset.preset.fraction == 6 %}
+                       Фракция: Демон
+                   {% elif preset.preset.fraction == 7 %}
+                       Фракция: Гном
+                   {% elif preset.preset.fraction == 8 %}
+                       Фракция: Степной варвар
+                   {% elif preset.preset.fraction == 9 %}
+                       Фракция: Фараон
+                   {% endif %}
+
+                   <div>
+                       Название пресета:
+                       <a href="{% url 'present' %}?preset_id={{preset.id}}">{{ preset.preset.name }}</a>
+                   </div>
+                   <div>Описание: {{ preset.preset.description }}</div>
+                   <div>Активен: {{ preset.play_preset|yesno:"✔,✘" }}</div>
+               </li>
+           {% endfor %}
+           </ul>
+
+           <form method="POST" action="http://127.0.0.1:8000/api/persons/" onsubmit="return confirm('Вы уверены, что хотите удалить этого игрока?');">
+               <input type="hidden" name="person_id" value="{{ player_data.id }}">
+               <button type="submit">УДАЛИТЬ</button>
+           </form>
+       {% endblock %}

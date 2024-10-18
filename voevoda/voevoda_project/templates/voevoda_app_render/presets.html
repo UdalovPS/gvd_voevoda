@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div>Presets</div>
-        <!--
+<div>Presets</div>
+<!--
             1)Запрашиваем список всех пресетов
               url: http://127.0.0.1:8000/api/presets/
               type: GET
@@ -31,8 +31,58 @@
                 При нажатии на кнопку переходим по URL
                 <a href="{% url 'present' %}" >Пресет</a>
         -->
-        <div class="url_box">
-                <a href="{% url 'present' %}?preset_id=3" >Пресет</a>
-        </div>
+
+<div id="presets-list"></div>
+
+<div class="url_box">
+    <a href="{% url 'present' %}" >Добавить пресет</a>
+</div>
+
+<script>
+    const voevodaId = "{{ request.session.voevoda_id }}";
+    const url = `http://127.0.0.1:8000/api/presets/?voevoda_id=${voevodaId}`;
+
+    const fractionMap = {
+        0: "Рыцарь",
+        1: "Некромант",
+        2: "Маг",
+        3: "Эльф",
+        4: "Варвар",
+        5: "Темный эльф",
+        6: "Демон",
+        7: "Гном",
+        8: "Степной варвар",
+        9: "Фараон"
+    };
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const presets = data.data;
+                const presetsListDiv = document.getElementById('presets-list');
+                presets.forEach(preset => {
+                    const fractionName = fractionMap[preset.fraction];
+                    const presetHtml = `
+                        <div class="preset">
+                            <h3>
+                                <a href="{% url 'present' %}?preset_id=${preset.id}">
+                                    ${preset.name}
+                                </a>
+                            </h3>
+                            <p>Фракция: ${fractionName}</p>
+                            <p>${preset.description}</p>
+                        </div>
+                    `;
+                    presetsListDiv.innerHTML += presetHtml;
+                });
+            } else {
+                console.error('Ошибка получения списка пресетов');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка выполнения запроса:', error);
+        });
+</script>
 
 {% endblock %}

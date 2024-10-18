@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div>MAIN</div>
+    <div>MAIN</div>
         <!--
                 Для наполнения страницы контентом нужно сделать несколько API запросов
                 1.
@@ -28,19 +28,64 @@
                         Полученные данные нужно отрендерить. При нажатии на ИМЯ (название клана). Нужно переходить на вкладку clan (href переход на нее есть ниже)
                         но при этом к запросу прибавляется параметр clan_id == [ID из поля выше]
         -->
-        <div class="url_box">
-                <a href="{% url 'presents' %}" >Пресеты</a>
-        </div>
-        <div class="url_box">
-                <a href="{% url 'clan' %}?my=true" >Клан</a>
-        </div>
-        <div class="url_box">
-                <a href="{% url 'players' %}" >Игроки</a>
-        </div>
-        <div class="url_box">
-                <a href="{% url 'events' %}" >Ивенты</a>
-        </div>
-        <div class="url_box">
-                <a href="{% url 'fights' %}" >История боев</a>
-        </div>
+
+    <div id="clan-info"></div>
+
+    <div class="url_box">
+        <a href="{% url 'presents' %}">Пресеты</a>
+    </div>
+    <div class="url_box">
+        <a href="{% url 'clan' %}?my=true">Клан</a>
+    </div>
+    <div class="url_box">
+        <a href="{% url 'players' %}">Игроки</a>
+    </div>
+    <div class="url_box">
+        <a href="{% url 'events' %}">Ивенты</a>
+    </div>
+    <div class="url_box">
+        <a href="{% url 'fights' %}">История боев</a>
+    </div>
+
+    <script>
+        const clanId = "{{ request.session.clan_id }}";
+
+        const url = `http://127.0.0.1:8000/api/clans/?clan_id=${clanId}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const clan = data.data;
+
+                    const clanInfoDiv = document.getElementById('clan-info');
+                    let htmlContent = `
+                        <h3>
+                            Клан: <a href="{% url 'clan' %}?clan_id=${clan.id}">${clan.name}</a>
+                        </h3>
+                        <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.id}" target="_blank">
+                            <img src="${clan.label}" alt="${clan.name} gif">
+                        </a>
+                    `;
+
+                    if (clan.alliance) {
+                        htmlContent += `
+                            <h4>Альянс: <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.alliance.id}" target="_blank">${clan.alliance.name}</a></h4>
+                            <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.alliance.id}" target="_blank">
+                                <img src="${clan.alliance.label}" alt="${clan.alliance.name} gif">
+                            </a>
+                        `;
+                    }
+                    clanInfoDiv.innerHTML = htmlContent;
+
+
+                } else {
+                    console.error('Ошибка получения данных о клане');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка выполнения запроса:', error);
+            });
+    </script>
+
 {% endblock %}

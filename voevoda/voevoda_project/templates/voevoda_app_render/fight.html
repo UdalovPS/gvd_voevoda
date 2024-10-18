@@ -217,4 +217,186 @@
 
                         после сохранения спрыгивам на предыдущую страницу
         -->
+
+    {% if fight_data %}
+        <form id="fightForm">
+            <label>Название боя:</label>
+            <input type="text" name="name" value="{{ fight_data.name }}" />
+
+            <label>Тип боя:</label>
+            <select name="type">
+                <option value="1" {% if fight_data.type == 1 %}selected{% endif %}>Атака</option>
+                <option value="2" {% if fight_data.type == 2 %}selected{% endif %}>Защита</option>
+            </select>
+
+            <label>Дата и время:</label>
+            <input type="datetime-local" name="date" value="{{ fight_data.date|date:"Y-m-d\TH:i" }}" />
+
+            <label>Персонаж 1 атаки:</label>
+            <a href="{% url 'player' %}?player_id={{ fight_data.attack_1_pers.id }}">{{ fight_data.attack_1_pers.name }}</a>
+
+            <label>Персонаж 2 атаки:</label>
+            <a href="{% url 'player' %}?player_id={{ fight_data.attack_2_pers.id }}">{{ fight_data.attack_2_pers.name }}</a>
+
+            <label>Персонаж 1 защиты:</label>
+            <a href="{% url 'player' %}?player_id={{ fight_data.defense_1_pers.id }}">{{ fight_data.defense_1_pers.name }}</a>
+
+            <label>Персонаж 2 атаки:</label>
+            <a href="{% url 'player' %}?player_id={{ fight_data.defense_2_pers.id }}">{{ fight_data.defense_2_pers.name }}</a>
+
+            <label>Пресет персонажа 1 атаки:</label>
+            <a href="{% url 'preset' %}?preset_id={{ fight_data.attack_1_pers_preset.id }}">{{ fight_data.attack_1_pers_preset.name }}</a>
+
+            <label>Пресет персонажа 2 атаки:</label>
+            <a href="{% url 'preset' %}?preset_id={{ fight_data.attack_2_pers_preset.id }}">{{ fight_data.attack_2_pers_preset.name }}</a>
+
+            <label>Пресет персонажа 1 защиты:</label>
+            <a href="{% url 'preset' %}?preset_id={{ fight_data.defense_1_pers_preset.id }}">{{ fight_data.defense_1_pers_preset.name }}</a>
+
+            <label>Пресет персонажа 2 защиты:</label>
+            <a href="{% url 'preset' %}?preset_id={{ fight_data.defense_2_pers_preset.id }}">{{ fight_data.defense_2_pers_preset.name }}</a>
+
+            <label>Результат боя:</label>
+            <select name="result">
+                <option value="1" {% if fight_data.result == 1 %}selected{% endif %}>Победа атаки</option>
+                <option value="2" {% if fight_data.result == 2 %}selected{% endif %}>Победа защиты</option>
+            </select>
+
+            <label>Описание:</label>
+            <textarea name="description">{{ fight_data.description }}</textarea>
+        </form>
+
+        <button id="deleteFight">Удалить</button>
+        <script>
+                document.getElementById("deleteFight").addEventListener("click", function() {
+                        const fightId = {{ fight_data.id }};
+
+                        fetch(`http://127.0.0.1:8000/api/fights/`, {
+                                method: 'DELETE',
+                                headers: {
+                                'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ fight_id: fightId })
+                        }).then(response => {
+                                if (response.ok) {
+                                window.location.href = '/previous_page/';
+                                } else {
+                                console.error('Failed to delete fight');
+                                }
+                });
+        });
+
+        </script>
+        {% if not fight_data %}
+        {% if event_id %}
+            <script>
+                fetch(`http://127.0.0.1:8000/api/events/?event_id={{ event_id }}`)
+                    .then(response => response.json())
+                    .then(eventData => {
+                        document.querySelector('input[name="name"]').value = eventData.name;
+                        document.querySelector('select[name="type"]').value = eventData.type;
+                        document.querySelector('input[name="date"]').value = new Date(eventData.date).toISOString().slice(0, 16);
+                        fetch(`http://127.0.0.1:8000/api/invites/?event_id={{ event_id }}&state__in=4`)
+                            .then(response => response.json())
+                            .then(inviteData => {
+                                document.querySelector('input[name="enemy"]').value = inviteData.enemy;
+                            });
+                    });
+
+            </script>
+
+            <form id="fightForm">
+                <label>Название боя:</label>
+                <input type="text" name="name" />
+
+                <label>Тип боя:</label>
+                <select name="type">
+                    <option value="1">Атака</option>
+                    <option value="2">Защита</option>
+                </select>
+
+                <label>Дата и время:</label>
+                <input type="datetime-local" name="date" />
+
+                <label>Соперник:</label>
+                <input type="text" name="enemy" />
+
+            </form>
+
+        {% else %}
+            <form id="clanForm">
+                <label>Выберите клан:</label>
+                <input type="text" id="clanSearch" name="clan" placeholder="Введите не менее 3 символов" />
+
+                <div id="clanResults"></div>
+
+                <label>Персонажи атаки:</label>
+                <select id="attack_1_pers"></select>
+                <select id="attack_2_pers"></select>
+
+                <label>Персонажи защиты:</label>
+                <select id="defense_1_pers"></select>
+                <select id="defense_2_pers"></select>
+
+            </form>
+
+            <script>
+                let clanSearchTimeout;
+                document.getElementById('clanSearch').addEventListener('input', function () {
+                    clearTimeout(clanSearchTimeout);
+                    const query = this.value;
+
+                    if (query.length >= 3) {
+                        clanSearchTimeout = setTimeout(function () {
+                            fetch(`http://127.0.0.1:8000/api/clans/?clan_name=${query}`)
+                                .then(response => response.json())
+                                .then(clans => {
+                                    const resultsDiv = document.getElementById('clanResults');
+                                    resultsDiv.innerHTML = '';
+                                    clans.forEach(clan => {
+                                        const clanDiv = document.createElement('div');
+                                        clanDiv.innerHTML = `<img src="${clan.label}" alt="Clan logo"/> <span>${clan.name}</span>`;
+                                        clanDiv.addEventListener('click', function () {
+                                            selectClan(clan.id);
+                                        });
+                                        resultsDiv.appendChild(clanDiv);
+                                    });
+                                });
+                        }, 2000);
+                    }
+                });
+
+                function selectClan(clan_id) {
+                    fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clan_id}`)
+                        .then(response => response.json())
+                        .then(players => {
+                            const attack1Select = document.getElementById('attack_1_pers');
+                            const attack2Select = document.getElementById('attack_2_pers');
+                            const defense1Select = document.getElementById('defense_1_pers');
+                            const defense2Select = document.getElementById('defense_2_pers');
+
+                            attack1Select.innerHTML = '';
+                            attack2Select.innerHTML = '';
+                            defense1Select.innerHTML = '';
+                            defense2Select.innerHTML = '';
+
+                            players.forEach(player => {
+                                const option = document.createElement('option');
+                                option.value = player.id;
+                                option.textContent = player.name;
+
+                                attack1Select.appendChild(option.cloneNode(true));
+                                attack2Select.appendChild(option.cloneNode(true));
+                                defense1Select.appendChild(option.cloneNode(true));
+                                defense2Select.appendChild(option.cloneNode(true));
+                            });
+                        });
+                }
+            </script>
+
+        {% endif %}
+    {% endif %}
+
+    </div>
+
 {% endblock %}

@@ -81,7 +81,90 @@
           под ней спрятан переход на "{% url 'fight' %}"
 
         -->
-    <div class="url_box">
-                <a href="{% url 'fight' %}" >Бой</a>
-        </div>
+
+            <div>
+                <h3>Атаки</h3>
+                <div id="attacks"></div>
+            </div>
+
+            <div>
+                <h3>Защиты</h3>
+                <div id="defences"></div>
+            </div>
+
+            <div class="url_box">
+                <a href="{% url 'fight' %}">Добавить бой</a>
+            </div>
+
+            <script>
+                const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                function formatDate(timestamp) {
+                    const date = new Date(timestamp * 1000);
+                    return date.toLocaleString('ru-RU', { timeZone });
+                }
+
+                fetch(`http://127.0.0.1:8000/api/fights/?voevoda_id={{ request.session.voevoda_id }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const attacksDiv = document.getElementById('attacks');
+                        const defencesDiv = document.getElementById('defences');
+                        console.log(data);
+                        data.data.forEach(fight => {
+                            const fightDiv = document.createElement('div');
+                            fightDiv.classList.add('fight');
+
+                            const fightLink = document.createElement('a');
+                            fightLink.href = `{% url 'fight' %}?fight_id=` + fight.id;
+                            fightLink.textContent = fight.name;
+
+                            const fightDate = document.createElement('p');
+                            fightDate.textContent = `Дата: ${formatDate(fight.date)}`;
+
+                            const attack1Link = document.createElement('a');
+                            attack1Link.href = `{% url 'player' %}?player_id=` + fight.attack_1_pers.id;
+                            attack1Link.textContent = fight.attack_1_pers.name;
+
+                            const attack1Preset = document.createElement('a');
+                            attack1Preset.href = `{% url 'present' %}?preset_id=` + fight.attack_1_pers_preset.id;
+                            attack1Preset.textContent = fight.attack_1_pers_preset.name;
+
+                            const defence1Link = document.createElement('a');
+                            defence1Link.href = `{% url 'player' %}?player_id=` + fight.defence_1_pers.id;
+                            defence1Link.textContent = fight.defence_1_pers.name;
+
+                            const defence1Preset = document.createElement('a');
+                            defence1Preset.href = `{% url 'present' %}?preset_id=` + fight.defence_1_pers_preset.id;
+                            defence1Preset.textContent = fight.defence_1_pers_preset.name;
+
+                            const result = document.createElement('span');
+                            if (fight.result === 1 && fight.type === 1 || fight.result === 2 && fight.type === 2) {
+                                result.textContent = 'Победа';
+                                result.style.color = 'green';
+                            } else {
+                                result.textContent = 'Поражение';
+                                result.style.color = 'red';
+                            }
+
+                            fightDiv.appendChild(fightLink);
+                            fightDiv.appendChild(fightDate);
+                            fightDiv.appendChild(document.createTextNode('Атака: '));
+                            fightDiv.appendChild(attack1Link);
+                            fightDiv.appendChild(document.createTextNode(' (' + attack1Preset.textContent + ')'));
+                            fightDiv.appendChild(document.createElement('br'));
+                            fightDiv.appendChild(document.createTextNode('Защита: '));
+                            fightDiv.appendChild(defence1Link);
+                            fightDiv.appendChild(document.createTextNode(' (' + defence1Preset.textContent + ')'));
+                            fightDiv.appendChild(document.createElement('br'));
+                            fightDiv.appendChild(result);
+
+                            if (fight.type === 1) {
+                                attacksDiv.appendChild(fightDiv);
+                            } else if (fight.type === 2) {
+                                defencesDiv.appendChild(fightDiv);
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Ошибка получения данных:', error));
+            </script>
 {% endblock %}

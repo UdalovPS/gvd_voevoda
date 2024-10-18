@@ -142,7 +142,7 @@ class ClansLogic:
             "id": data.id,
             "name": data.name,
             "label": data.label,
-            "alliance": self.get_clan_data_wuthout_alliance(alliance_data=data.alliance)
+            "alliance": self.get_clan_data_without_alliance(alliance_data=data.alliance)
         }
 
     @staticmethod
@@ -496,7 +496,7 @@ class PersonsLogic(Redis):
         presets_list = PresetsLogic().get_presets_data(data_filter={"voevoda_id": check_data_by_key.voevoda_id})
 
         for preset in presets_list:
-            PersonPresetLogic().add_new_person_preset_data(in_data={
+            PersonPresetLogic().add_new_person_preset(in_data={
                 "person_id": new_person["id"],
                 "preset_id": preset["id"]
             })

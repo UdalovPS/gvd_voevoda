@@ -53,4 +53,112 @@
 
                 И выпрыгиваем не предыдущую страницу
         -->
+
+    <form id="preset-form">
+        <label for="fraction">Фракция:</label>
+        <select id="fraction" name="fraction">
+            <option value="0" {% if preset_data and preset_data.fraction == 0 %}selected{% endif %}>Рыцарь</option>
+            <option value="1" {% if preset_data and preset_data.fraction == 1 %}selected{% endif %}>Некромант</option>
+            <option value="2" {% if preset_data and preset_data.fraction == 2 %}selected{% endif %}>Маг</option>
+            <option value="3" {% if preset_data and preset_data.fraction == 3 %}selected{% endif %}>Эльф</option>
+            <option value="4" {% if preset_data and preset_data.fraction == 4 %}selected{% endif %}>Варвар</option>
+            <option value="5" {% if preset_data and preset_data.fraction == 5 %}selected{% endif %}>Темный эльф</option>
+            <option value="6" {% if preset_data and preset_data.fraction == 6 %}selected{% endif %}>Демон</option>
+            <option value="7" {% if preset_data and preset_data.fraction == 7 %}selected{% endif %}>Гном</option>
+            <option value="8" {% if preset_data and preset_data.fraction == 8 %}selected{% endif %}>Степной варвар</option>
+            <option value="9" {% if preset_data and preset_data.fraction == 9 %}selected{% endif %}>Фараон</option>
+        </select>
+
+        <label for="name">Название:</label>
+        <input type="text" id="name" name="name" value="{% if preset_data %}{{ preset_data.name }}{% endif %}">
+
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description">{% if preset_data %}{{ preset_data.description }}{% endif %}</textarea>
+
+        <div>
+            {% if preset_data %}
+                <button type="button" id="update-btn">Обновить</button>
+                <button type="button" id="delete-btn">Удалить</button>
+            {% else %}
+                <button type="button" id="save-btn">Сохранить</button>
+            {% endif %}
+        </div>
+    </form>
+
+    <script>
+        const voevodaId = "{{ request.session.voevoda_id }}";
+        const presetId = {% if preset_data %}{{ preset_data.id }}{% else %}null{% endif %};
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.getElementById('save-btn')?.addEventListener('click', function () {
+            const data = {
+                voevoda_id: voevodaId,
+                fraction: document.getElementById('fraction').value,
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value
+            };
+
+            fetch('http://127.0.0.1:8000/api/presets/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    goBack();
+                } else {
+                    console.error('Ошибка при сохранении пресета');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+
+        document.getElementById('update-btn')?.addEventListener('click', function () {
+            const data = {
+                preset_id: presetId,
+                fraction: document.getElementById('fraction').value,
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value
+            };
+
+            fetch('http://127.0.0.1:8000/api/presets/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    goBack();
+                } else {
+                    console.error('Ошибка при обновлении пресета');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+
+        document.getElementById('delete-btn')?.addEventListener('click', function () {
+            fetch(`http://127.0.0.1:8000/api/presets/?preset_id=${presetId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    goBack();
+                } else {
+                    console.error('Ошибка при удалении пресета');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    </script>
+
 {% endblock %}
