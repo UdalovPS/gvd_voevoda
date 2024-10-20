@@ -156,7 +156,7 @@ LOGGING = {
         },
         'voevoda_app': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         },
     },

@@ -157,13 +157,13 @@ class Fight(View):
 
         presets_data = requests.get(
             url="http://127.0.0.1:8000/api/presets/",
-            params={voevoda_id: "voevoda_id"}
+            params={"voevoda_id": voevoda_id}
         ).json()
 
         if fight_id and voevoda_id:
             fight_data = requests.get(
                 url="http://127.0.0.1:8000/api/fights/",
-                params={"fight_id": fight_id, voevoda_id: "voevoda_id"}
+                params={"fight_id": fight_id, "voevoda_id": voevoda_id}
             ).json()
             if fight_data["success"]:
                 if fight_data["data"]["voevoda_id"] == int(voevoda_id):

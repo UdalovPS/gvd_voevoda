@@ -276,41 +276,70 @@
     {% if not event_data %}
         <form id="event-form">
             <label for="event-name">Название:</label>
-            <input type="text" id="event-name" name="name">
+            <input type="text" id="event-name" name="name" required>
 
             <label for="event-type">Тип события:</label>
-            <select id="event-type" name="type">
+            <select id="event-type" name="type" required>
                 <option value="1">Атака</option>
                 <option value="2">Защита</option>
             </select>
 
             <label for="event-date">Дата и время:</label>
-            <input type="datetime-local" id="event-date" name="date">
+            <input type="datetime-local" id="event-date" name="date" required>
 
             <label for="event-enemy">Враг:</label>
-            <input type="text" id="event-enemy" name="enemy" placeholder="Введите имя клана...">
-            <div id="enemy-details"></div>
+            <input type="text" id="event-enemy" name="enemy" placeholder="Введите имя клана..." list="clan-list" required>
+            <datalist id="clan-list"></datalist>
+            <div id="enemy-details"></div> <!-- Показывает выбранного врага -->
 
             <button type="button" id="create-event">Создать ивент</button>
         </form>
-
         <script>
             let selectedEnemyId = null;
-            document.getElementById('event-enemy').addEventListener('input', function() {
+            const inputField = document.getElementById('event-enemy');
+            const clanList = document.getElementById('clan-list');
+            const enemyDetails = document.getElementById('enemy-details');
+
+            inputField.addEventListener('input', function() {
                 const query = this.value;
                 if (query.length >= 3) {
-                    setTimeout(() => {
-                        fetch(`http://127.0.0.1:8000/api/clans?clan_name=${query}`)
+                    // Очищаем предыдущие варианты
+                    clanList.innerHTML = '';
+                    clearTimeout(this.fetchTimeout);
+
+                    // Задержка перед выполнением запроса
+                    this.fetchTimeout = setTimeout(() => {
+                        fetch(`http://127.0.0.1:8000/api/clans?clan_name=${encodeURIComponent(query)}`)
                             .then(response => response.json())
                             .then(data => {
-                                const enemy = data[0];
-                                selectedEnemyId = enemy.id;
-                                document.getElementById('enemy-details').innerHTML = `
-                                    <img src="${enemy.label}" alt="Враг" />
-                                    <p>${enemy.name}</p>
-                                `;
+                                // Очищаем список перед добавлением новых вариантов
+                                clanList.innerHTML = '';
+
+                                // Заполняем список вариантами
+                                data.data.forEach(enemy => {
+                                    const option = document.createElement('option');
+                                    option.value = enemy.name;
+                                    option.dataset.id = enemy.id;  // Сохраняем ID клана
+                                    clanList.appendChild(option);
+                                });
                             });
-                    }, 2000);
+                    }, 500); // Интервал в 500 мс для оптимизации запросов
+                }
+            });
+
+            inputField.addEventListener('change', function() {
+                const selectedOption = Array.from(clanList.options).find(option => option.value === this.value);
+
+                if (selectedOption) {
+                    selectedEnemyId = selectedOption.dataset.id;
+                    fetch(`http://127.0.0.1:8000/api/clans/${selectedEnemyId}`)
+                        .then(response => response.json())
+                        .then(enemy => {
+                            enemyDetails.innerHTML = `
+                                <img src="${enemy.label}" alt="Враг" />
+                                <p>${enemy.name}</p>
+                            `;
+                        });
                 }
             });
 

@@ -72,6 +72,7 @@ class PlayerView(View):
 
         obj = PlayersLogic()
         data = obj.get_players_data(player_filter=player_filter)
+        logger.debug(f"Players data: {data}")
 
         if data:
             return JsonResponse(data={"success": True, "data": data}, status=200)
@@ -176,6 +177,7 @@ class PresetsView(View):
         }
         obj = PresetsLogic()
         data = obj.get_presets_data(data_filter=preset_filter)
+        logger.info(f"Presets data: {data}")
 
         if data:
             return JsonResponse(data={"success": True, "data": data}, status=200)
@@ -382,6 +384,7 @@ class FightsEventsView(View):
             filter["state__in"] = request.GET.getlist('state__in')
 
         data = FightEventLogic().get_events(in_data=filter)
+        logger.info(f"Events data: {data}")
         if data:
             return JsonResponse(data={"success": True, "data": data}, status=200)
         else:

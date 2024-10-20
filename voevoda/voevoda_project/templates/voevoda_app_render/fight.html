@@ -287,6 +287,7 @@
         });
 
         </script>
+         {% endif %}
         {% if not fight_data %}
         {% if event_id %}
             <script>
@@ -324,79 +325,158 @@
             </form>
 
         {% else %}
-            <form id="clanForm">
-                <label>Выберите клан:</label>
-                <input type="text" id="clanSearch" name="clan" placeholder="Введите не менее 3 символов" />
+        <form id="clanForm">
+            <label>Выберите клан:</label>
+            <input type="text" id="clanSearch" name="clan" placeholder="Введите не менее 3 символов" list="clanList"/>
+            <datalist id="clanList"></datalist>
 
-                <div id="clanResults"></div>
+            <div id="clanResults"></div>
 
-                <label>Персонажи атаки:</label>
-                <select id="attack_1_pers"></select>
-                <select id="attack_2_pers"></select>
+            <label>Персонажи атаки:</label>
+            <select id="attack_1_pers"></select>
+            <select id="attack_2_pers"></select>
 
-                <label>Персонажи защиты:</label>
-                <select id="defense_1_pers"></select>
-                <select id="defense_2_pers"></select>
+            <label>Персонажи защиты:</label>
+            <select id="defense_1_pers"></select>
+            <select id="defense_2_pers"></select>
 
-            </form>
+            <label for="fight-name">Название боя:</label>
+            <input type="text" id="fight-name" name="name" required>
 
-            <script>
-                let clanSearchTimeout;
-                document.getElementById('clanSearch').addEventListener('input', function () {
-                    clearTimeout(clanSearchTimeout);
-                    const query = this.value;
+            <label for="fight-type">Тип боя:</label>
+            <select id="fight-type" name="type" required>
+                <option value="1">Атака</option>
+                <option value="2">Защита</option>
+            </select>
 
-                    if (query.length >= 3) {
-                        clanSearchTimeout = setTimeout(function () {
-                            fetch(`http://127.0.0.1:8000/api/clans/?clan_name=${query}`)
-                                .then(response => response.json())
-                                .then(clans => {
-                                    const resultsDiv = document.getElementById('clanResults');
-                                    resultsDiv.innerHTML = '';
-                                    clans.forEach(clan => {
-                                        const clanDiv = document.createElement('div');
-                                        clanDiv.innerHTML = `<img src="${clan.label}" alt="Clan logo"/> <span>${clan.name}</span>`;
-                                        clanDiv.addEventListener('click', function () {
-                                            selectClan(clan.id);
-                                        });
-                                        resultsDiv.appendChild(clanDiv);
-                                    });
+            <label for="fight-date">Дата и время боя:</label>
+            <input type="datetime-local" id="fight-date" name="date" required>
+
+            <label for="fight-result">Результат боя:</label>
+            <input type="text" id="fight-result" name="result">
+
+            <label for="fight-description">Комментарий к бою:</label>
+            <textarea id="fight-description" name="description"></textarea>
+
+            <button type="button" id="submitFight">ДОБАВИТЬ</button>
+
+        </form>
+
+        <script>
+            let clanSearchTimeout;
+            const clanSearchInput = document.getElementById('clanSearch');
+            const clanList = document.getElementById('clanList');
+
+            clanSearchInput.addEventListener('input', function () {
+                clearTimeout(clanSearchTimeout);
+                const query = this.value;
+
+                if (query.length >= 3) {
+                    clanSearchTimeout = setTimeout(function () {
+                        fetch(`http://127.0.0.1:8000/api/clans/?clan_name=${encodeURIComponent(query)}`)
+                            .then(response => response.json())
+                            .then(clans => {
+                                clanList.innerHTML = '';
+                                console.log(clans);
+                                clans.data.forEach(clan => {
+                                    const option = document.createElement('option');
+                                    option.value = clan.name;
+                                    option.dataset.id = clan.id;
+                                    clanList.appendChild(option);
                                 });
-                        }, 2000);
-                    }
-                });
-
-                function selectClan(clan_id) {
-                    fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clan_id}`)
-                        .then(response => response.json())
-                        .then(players => {
-                            const attack1Select = document.getElementById('attack_1_pers');
-                            const attack2Select = document.getElementById('attack_2_pers');
-                            const defense1Select = document.getElementById('defense_1_pers');
-                            const defense2Select = document.getElementById('defense_2_pers');
-
-                            attack1Select.innerHTML = '';
-                            attack2Select.innerHTML = '';
-                            defense1Select.innerHTML = '';
-                            defense2Select.innerHTML = '';
-
-                            players.forEach(player => {
-                                const option = document.createElement('option');
-                                option.value = player.id;
-                                option.textContent = player.name;
-
-                                attack1Select.appendChild(option.cloneNode(true));
-                                attack2Select.appendChild(option.cloneNode(true));
-                                defense1Select.appendChild(option.cloneNode(true));
-                                defense2Select.appendChild(option.cloneNode(true));
                             });
-                        });
+                    }, 500);
                 }
-            </script>
+            });
+
+            clanSearchInput.addEventListener('change', function () {
+                const selectedOption = Array.from(clanList.options).find(option => option.value === this.value);
+                if (selectedOption) {
+                    const clanId = selectedOption.dataset.id;
+                    selectClan(clanId);
+                }
+            });
+
+            function selectClan(clan_id) {
+                fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clan_id}`)
+                    .then(response => response.json())
+                    .then(players => {
+                        console.log(players);
+                        const attack1Select = document.getElementById('attack_1_pers');
+                        const attack2Select = document.getElementById('attack_2_pers');
+                        const defense1Select = document.getElementById('defense_1_pers');
+                        const defense2Select = document.getElementById('defense_2_pers');
+
+                        attack1Select.innerHTML = '';
+                        attack2Select.innerHTML = '';
+                        defense1Select.innerHTML = '';
+                        defense2Select.innerHTML = '';
+
+                        players.data.forEach(player => {
+                            const option = document.createElement('option');
+                            option.value = player.id;
+                            option.textContent = player.name;
+
+                            attack1Select.appendChild(option.cloneNode(true));
+                            attack2Select.appendChild(option.cloneNode(true));
+                            defense1Select.appendChild(option.cloneNode(true));
+                            defense2Select.appendChild(option.cloneNode(true));
+                        });
+                    });
+            }
+
+            document.getElementById('submitFight').addEventListener('click', function () {
+                const fightName = document.getElementById('fight-name').value;
+                const fightType = document.getElementById('fight-type').value;
+                const fightDate = new Date(document.getElementById('fight-date').value).getTime() / 1000; // Преобразование даты в timestamp
+                const attack1Pers = document.getElementById('attack_1_pers').value;
+                const attack2Pers = document.getElementById('attack_2_pers').value;
+                const defense1Pers = document.getElementById('defense_1_pers').value;
+                const defense2Pers = document.getElementById('defense_2_pers').value;
+                const fightResult = document.getElementById('fight-result').value;
+                const fightDescription = document.getElementById('fight-description').value;
+
+                // Создаем объект для отправки на сервер
+                const fightData = {
+                    voevoda_id: sessionStorage.getItem('voevoda_id'), // получаем voevoda_id из сессии (или заменить на другой источник)
+                    name: fightName,
+                    type: fightType,
+                    date: fightDate,
+                    attack_1_pers: attack1Pers,
+                    attack_2_pers: attack2Pers,
+                    attack_1_pers_preset: attack1Pers,
+                    attack_2_pers_preset: attack2Pers,
+                    defence_1_pers: defense1Pers,
+                    defence_2_pers: defense2Pers,
+                    defence_1_pers_preset: defense1Pers,
+                    defence_2_pers_preset: defense2Pers,
+                    result: fightResult,
+                    description: fightDescription
+                };
+
+                // Отправка запроса POST на сервер
+                fetch('http://127.0.0.1:8000/api/fights/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(fightData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fight saved successfully:', data);
+                    // После успешного сохранения возвращаемся на предыдущую страницу
+                    window.location.href = "{% url 'fights' %}";
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        </script>
 
         {% endif %}
     {% endif %}
 
-    </div>
+</div>
 
 {% endblock %}

@@ -89,8 +89,8 @@
         const voevodaId = "{{ request.session.voevoda_id }}";
         const presetId = {% if preset_data %}{{ preset_data.id }}{% else %}null{% endif %};
 
-        function goBack() {
-            window.history.back();
+        function redirectToPresets() {
+            window.location.href = "{% url 'presents' %}";
         }
 
         document.getElementById('save-btn')?.addEventListener('click', function () {
@@ -111,7 +111,7 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    goBack();
+                    redirectToPresets();
                 } else {
                     console.error('Ошибка при сохранении пресета');
                 }
@@ -137,7 +137,7 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    goBack();
+                    redirectToPresets();
                 } else {
                     console.error('Ошибка при обновлении пресета');
                 }
@@ -152,7 +152,7 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    goBack();
+                    redirectToPresets();
                 } else {
                     console.error('Ошибка при удалении пресета');
                 }

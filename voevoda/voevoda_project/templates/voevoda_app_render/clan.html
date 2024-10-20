@@ -95,7 +95,7 @@
         })
         .catch(error => console.error('Ошибка получения данных клана:', error));
 
-        fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}`)
+        fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}&voevoda_id={{ request.session.voevoda_id }}`)
         .then(response => response.json())
         .then(data => {
         console.log('Ответ API для игроков:', data);

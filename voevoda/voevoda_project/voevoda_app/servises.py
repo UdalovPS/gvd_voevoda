@@ -259,9 +259,12 @@ class PlayersLogic:
         else:
             clan_id = None
         person_id = None
+        logger.info(f"voevoda_id: {voevoda_id}")
         if voevoda_id:
             try:
-                person_data = PersonsModel.objects.filter(player_id=data.id, voevoda_id=voevoda_id).first()
+                logger.info(f"try. player_id: {data.id} voevoda_id: {voevoda_id}")
+                person_data = PersonsModel.objects.get(player_id=data.id, voevoda_id=voevoda_id)
+                logger.info(f"Person_data: {person_data}")
                 if person_data:
                     person_id = person_data.id
             except ObjectDoesNotExist:
@@ -789,7 +792,7 @@ class FightEventLogic(Redis):
         try:
             # данные воеводы
             in_data["voevoda_id"] = VoevodaModel.objects.get(pk=in_data["voevoda_id"])
-            in_data["date"] = datetime.datetime.fromtimestamp(in_data["date"])
+            in_data["date"] = datetime.datetime.fromtimestamp(in_data["date"] / 1000)
             in_data["enemy"] = ClansModel.objects.get(pk=in_data["enemy"])
 
             data = FightEventModel.objects.create(**in_data)
