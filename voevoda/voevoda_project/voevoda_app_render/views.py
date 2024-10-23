@@ -132,14 +132,6 @@ class Clan(View):
         )
 
 
-class Event(View):
-    def get(self, request):
-        return render(
-            request=request,
-            template_name="voevoda_app_render/event.html",
-        )
-
-
 class Fights(View):
     def get(self, request):
         return render(

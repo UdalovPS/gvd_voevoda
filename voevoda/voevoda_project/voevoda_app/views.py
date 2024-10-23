@@ -337,6 +337,7 @@ class FightsView(View):
             "fight_id": request.GET.get('fight_id'),
             "voevoda_id": request.GET.get('voevoda_id')
         }
+        logger.info(f"FIghts filter: {filter}")
         data = FightsLogic().get_fights(in_data=filter)
         if data:
             return JsonResponse(data={"success": True, "data": data}, status=200)
