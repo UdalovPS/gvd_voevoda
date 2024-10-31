@@ -99,6 +99,7 @@
 </div>
 
 <script>
+    const BASE_URL = window.location.origin
     const voevodaId = "{{ request.session.voevoda_id }}";
     const presetId = {% if preset_data %}{{ preset_data.id }}{% else %}null{% endif %};
 
@@ -114,7 +115,7 @@
             description: document.getElementById('description').value
         };
 
-        fetch('http://127.0.0.1:8000/api/presets/', {
+        fetch(`${BASE_URL}/api/presets/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -140,7 +141,7 @@
             description: document.getElementById('description').value
         };
 
-        fetch('http://127.0.0.1:8000/api/presets/', {
+        fetch(`${BASE_URL}/api/presets/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -159,7 +160,7 @@
     });
 
     document.getElementById('delete-btn')?.addEventListener('click', function () {
-        fetch(`http://127.0.0.1:8000/api/presets/?preset_id=${presetId}`, {
+        fetch(`${BASE_URL}/api/presets/?preset_id=${presetId}`, {
             method: 'DELETE'
         })
         .then(response => response.json())

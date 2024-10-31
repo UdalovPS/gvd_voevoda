@@ -10,10 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+const BASE_URL = window.location.origin
+
 async function generateAccessCode() {
     const name = document.getElementById('name').value;
     console.log(`name: ${name}`);
-    const url = "http://127.0.0.1:8000/api/keys/";
+    const url = `${BASE_URL}/api/keys/`;
     const params = {
         "sub_key": "render",
         "name": name
@@ -49,7 +51,7 @@ async function generateAccessCode() {
 async function validateAccessCode() {
     const code = document.getElementById('code').value;
     console.log(`code: ${code}`);
-    const url = "http://127.0.0.1:8000/api/keys/";
+    const url = `${BASE_URL}/api/keys/`;
     const payload = {
         "code": code
     };
@@ -71,7 +73,7 @@ async function validateAccessCode() {
         const result = await response.json();
         if (result.success) {
             console.log(`redirect`);
-            window.location.href = "http://127.0.0.1:8000/?code=" + encodeURIComponent(code);
+            window.location.href = `${BASE_URL}/?code=` + encodeURIComponent(code);
         }
 
     } catch (error) {

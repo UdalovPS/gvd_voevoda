@@ -58,8 +58,9 @@
 
 
     <script>
+        const BASE_URL = window.location.origin
         const voevodaId = "{{ request.session.voevoda_id }}";
-        const url = `http://127.0.0.1:8000/api/events/?voevoda_id=${voevodaId}`;
+        const url = `${BASE_URL}/api/events/?voevoda_id=${voevodaId}`;
 
         const eventTypeMap = {
             1: { name: "Атака", iconClass: "icon-attack" },

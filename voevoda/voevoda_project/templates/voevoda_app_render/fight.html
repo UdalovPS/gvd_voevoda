@@ -285,10 +285,11 @@
             <button type="submit" id="deleteFight" style="width: auto; margin: 30px auto; background-color: #8b1513;">Удалить</button>
 
             <script>
+                const BASE_URL = window.location.origin
                 document.getElementById("deleteFight").addEventListener("click", function() {
                     const fightId = {{ fight_data.id }};
                     
-                    fetch(`http://127.0.0.1:8000/api/fights/`, {
+                    fetch(`${BASE_URL}/api/fights/`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
@@ -361,6 +362,7 @@
             </form>
         
         <script>
+            const BASE_URL = window.location.origin
             const voevodaId = "{{ request.session.voevoda_id }}";
             let clanSearchTimeout;         
             function searchClan(inputId, listId, isAttack) {
@@ -373,7 +375,7 @@
 
                     if (query.length >= 3) {
                         clanSearchTimeout = setTimeout(function () {
-                            fetch(`http://127.0.0.1:8000/api/clans/?clan_name=${encodeURIComponent(query)}`)
+                            fetch(`${BASE_URL}/api/clans/?clan_name=${encodeURIComponent(query)}`)
                                 .then(response => response.json())
                                 .then(clans => {
                                     clanList.innerHTML = '';
@@ -402,7 +404,7 @@
             }
 
             function loadPlayersForAttack (clanId) {
-                fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}`)
+                fetch(`${BASE_URL}/api/players/?clan_id=${clanId}`)
                     .then(response => response.json())
                     .then(players => {
                         clearPlayerSelects('attack_1_pers', 'attack_2_pers');
@@ -410,7 +412,7 @@
                         addPlayersToSelect(players.data, 'attack_1_pers', 'attack_2_pers');
 
                         if (players.alliance && players.alliance.id) {
-                            fetch(`http://127.0.0.1:8000/api/players/?clan_id=${players.alliance.id}`)
+                            fetch(`${BASE_URL}/api/players/?clan_id=${players.alliance.id}`)
                                 .then(response => response.json())
                                 .then(alliancePlayers => {
                                     addPlayersToSelect(alliancePlayers.data, 'attack_1_pers', 'attack_2_pers');
@@ -421,7 +423,7 @@
             }
 
             function loadPlayersForDefense(clanId) {
-                fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}`)
+                fetch(`${BASE_URL}/api/players/?clan_id=${clanId}`)
                     .then(response => response.json())
                     .then(players => {
                         clearPlayerSelects('defense_1_pers', 'defense_2_pers');
@@ -454,7 +456,7 @@
                 function loadPresets(selectId1, selectId2) {
                     const voevodaId = "{{ request.session.voevoda_id }}";
 
-                    fetch(`http://127.0.0.1:8000/api/presets/?voevoda_id=${voevodaId}`, {
+                    fetch(`${BASE_URL}/api/presets/?voevoda_id=${voevodaId}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -517,7 +519,7 @@
                     defence_2_pers_preset: document.getElementById('defense_2_pers_preset').value
                 };
 
-                fetch('http://127.0.0.1:8000/api/fights/', {
+                fetch(`${BASE_URL}/api/fights/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -537,14 +539,14 @@
         </script>
     {% if event_id %}
     <script>
-        fetch(`http://127.0.0.1:8000/api/events/?event_id={{ event_id }}`)
+        fetch(`${BASE_URL}/api/events/?event_id={{ event_id }}`)
             .then(response => response.json())
             .then(eventData => {
                 const event = eventData.data;
                 document.getElementById('fight-name').value = event.name;
                 document.getElementById('fight-type').value = event.type; 
                 
-                fetch(`http://127.0.0.1:8000/api/clans/?clan_id={{request.session.clan_id}}`)
+                fetch(`${BASE_URL}/api/clans/?clan_id={{request.session.clan_id}}`)
                     .then(response => response.json())
                     .then(data => {
                         const clanData = data.data;
@@ -563,7 +565,7 @@
                 const date = new Date(event.date * 1000);
                 document.getElementById('fight-date').value = date.toISOString().slice(0, 16);
     
-                fetch(`http://127.0.0.1:8000/api/invites/?event_id={{ event_id }}&state__in=4`)
+                fetch(`${BASE_URL}/api/invites/?event_id={{ event_id }}&state__in=4`)
                     .then(response => response.json())
                     .then(inviteData => {
                         let players = inviteData.data.map(invite => invite.person_id.stats); 

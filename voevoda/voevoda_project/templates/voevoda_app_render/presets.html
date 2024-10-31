@@ -51,8 +51,9 @@
 </div>
 
 <script>
+    const BASE_URL = window.location.origin
     const voevodaId = "{{ request.session.voevoda_id }}";
-    const url = `http://127.0.0.1:8000/api/presets/?voevoda_id=${voevodaId}`;
+    const url = `${BASE_URL}/api/presets/?voevoda_id=${voevodaId}`;
 
     const fractionMap = {
         0: "Рыцарь",

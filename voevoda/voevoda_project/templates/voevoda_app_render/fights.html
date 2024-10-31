@@ -108,6 +108,7 @@
         </div>
         
             <script>
+                const BASE_URL = window.location.origin
                 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         
                 function formatDate(timestamp) {
@@ -115,7 +116,7 @@
                     return date.toLocaleString('ru-RU', { timeZone });
                 }
 
-                fetch(`http://127.0.0.1:8000/api/fights/?voevoda_id={{ request.session.voevoda_id }}`)
+                fetch(`${BASE_URL}/api/fights/?voevoda_id={{ request.session.voevoda_id }}`)
                     .then(response => response.json())
                     .then(data => {
                         const attacksDiv = document.getElementById('attacks');
