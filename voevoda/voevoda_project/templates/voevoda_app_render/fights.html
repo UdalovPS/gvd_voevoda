@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %} 
 {% block content %}
-        <div>Fights</div>
         <!--
           1)Делаем запрос для получения истории боев
             url: http://127.0.0.1:8000/api/fights/
@@ -81,26 +80,38 @@
           под ней спрятан переход на "{% url 'fight' %}"
 
         -->
-
-            <div>
-                <h3>Атаки</h3>
-                <div id="attacks"></div>
+        <div class="sh_MenuPanel" style="width: 10px;">
+            <div class="mm_l"></div>
+            <div class="mm_r"></div>
+            <a href="{% url 'main' %}">
+                <img src="{% static 'voevoda_app/images/arrow.png' %}" href="{% url 'main' %}" class="cursor_main_menu">
+            </a>
+            <div class="main_menu" hwm_label=""><a href="{% url 'main' %}">Главное меню</a></div>
+            <div class="not_auth_text_on_buttons2">История боев</div>
+        </div>
+        <div class="event-container" style="align-items: center; width: 70%; margin: auto;">
+            <div class="fight-columns">
+                <div class="fight-section">
+                    <h3>🗡️ Атаки:</h3>
+                    <div id="attacks" class="fights-container"></div>
+                </div>
+        
+                <div class="fight-section">
+                    <h3>🛡️ Защиты:</h3>
+                    <div id="defences" class="fights-container"></div>
+                </div>
             </div>
-
-            <div>
-                <h3>Защиты</h3>
-                <div id="defences"></div>
+        
+            <div class="button-container">
+                <a href="{% url 'fight' %}" class="add-preset-button">Добавить бой</a>
             </div>
-
-            <div class="url_box">
-                <a href="{% url 'fight' %}">Добавить бой</a>
-            </div>
-
+        </div>
+        
             <script>
                 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
+        
                 function formatDate(timestamp) {
-                    const date = new Date(timestamp * 1000);
+                    const date = new Date(timestamp * 1000); 
                     return date.toLocaleString('ru-RU', { timeZone });
                 }
 
@@ -112,50 +123,75 @@
                         console.log(data);
                         data.data.forEach(fight => {
                             const fightDiv = document.createElement('div');
-                            fightDiv.classList.add('fight');
-
+                            fightDiv.classList.add('fights');
+        
                             const fightLink = document.createElement('a');
                             fightLink.href = `{% url 'fight' %}?fight_id=` + fight.id;
                             fightLink.textContent = fight.name;
-
+        
                             const fightDate = document.createElement('p');
                             fightDate.textContent = `Дата: ${formatDate(fight.date)}`;
-
+        
                             const attack1Link = document.createElement('a');
                             attack1Link.href = `{% url 'player' %}?player_id=` + fight.attack_1_pers.id;
                             attack1Link.textContent = fight.attack_1_pers.name;
-
+        
                             const attack1Preset = document.createElement('a');
                             attack1Preset.href = `{% url 'present' %}?preset_id=` + fight.attack_1_pers_preset.id;
                             attack1Preset.textContent = fight.attack_1_pers_preset.name;
 
+                            const attack2Link = document.createElement('a');
+                            attack2Link.href = `{% url 'player' %}?player_id=` + fight.attack_2_pers.id;
+                            attack2Link.textContent = fight.attack_2_pers.name;
+        
+                            const attack2Preset = document.createElement('a');
+                            attack2Preset.href = `{% url 'present' %}?preset_id=` + fight.attack_2_pers_preset.id;
+                            attack2Preset.textContent = fight.attack_2_pers_preset.name;
+        
                             const defence1Link = document.createElement('a');
                             defence1Link.href = `{% url 'player' %}?player_id=` + fight.defence_1_pers.id;
                             defence1Link.textContent = fight.defence_1_pers.name;
-
+        
                             const defence1Preset = document.createElement('a');
                             defence1Preset.href = `{% url 'present' %}?preset_id=` + fight.defence_1_pers_preset.id;
                             defence1Preset.textContent = fight.defence_1_pers_preset.name;
 
+                            const defence2Link = document.createElement('a');
+                            defence2Link.href = `{% url 'player' %}?player_id=` + fight.defence_2_pers.id;
+                            defence2Link.textContent = fight.defence_2_pers.name;
+        
+                            const defence2Preset = document.createElement('a');
+                            defence2Preset.href = `{% url 'present' %}?preset_id=` + fight.defence_2_pers_preset.id;
+                            defence2Preset.textContent = fight.defence_2_pers_preset.name;
+        
                             const result = document.createElement('span');
+                            result.classList.add('result');
                             if (fight.result === 1 && fight.type === 1 || fight.result === 2 && fight.type === 2) {
-                                result.textContent = 'Победа';
-                                result.style.color = 'green';
+                                result.textContent = 'Победа стороны атаки';
                             } else {
-                                result.textContent = 'Поражение';
-                                result.style.color = 'red';
+                                result.textContent = 'Победа стороны защиты';
                             }
-
+  
                             fightDiv.appendChild(fightLink);
                             fightDiv.appendChild(fightDate);
-                            fightDiv.appendChild(document.createTextNode('Атака: '));
+                            fightDiv.appendChild(document.createTextNode('Игрок 1 атаки: '));
                             fightDiv.appendChild(attack1Link);
                             fightDiv.appendChild(document.createTextNode(' (' + attack1Preset.textContent + ')'));
                             fightDiv.appendChild(document.createElement('br'));
-                            fightDiv.appendChild(document.createTextNode('Защита: '));
+                            fightDiv.appendChild(document.createTextNode('Игрок 2 атаки: '));
+                            fightDiv.appendChild(attack2Link);
+                            fightDiv.appendChild(document.createTextNode(' (' + attack2Preset.textContent + ')'));
+                            fightDiv.appendChild(document.createElement('br'));
+
+                            fightDiv.appendChild(document.createTextNode('Игрок 1 защиты: '));
                             fightDiv.appendChild(defence1Link);
                             fightDiv.appendChild(document.createTextNode(' (' + defence1Preset.textContent + ')'));
                             fightDiv.appendChild(document.createElement('br'));
+                            fightDiv.appendChild(document.createTextNode('Игрок 2 защиты: '));
+                            fightDiv.appendChild(defence2Link);
+                            fightDiv.appendChild(document.createTextNode(' (' + defence2Preset.textContent + ')'));
+                            fightDiv.appendChild(document.createElement('br'));
+
                             fightDiv.appendChild(result);
 
                             if (fight.type === 1) {

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %} 
 {% block content %}
-        <div>PLAYERS</div>
         <!--
                 1)Запрашиваем список всех всех живых игроков относящихся к данному воеводе
                       url: http://127.0.0.1:8000/api/persons/
@@ -71,7 +70,17 @@
                       ]
 
            -->
-
+           <div class="sh_MenuPanel" style="width: 10px;">
+            <div class="mm_l"></div>
+            <div class="mm_r"></div>
+            <a href="{% url 'main' %}">
+                <img src="{% static 'voevoda_app/images/arrow.png' %}" href="{% url 'main' %}" class="cursor_main_menu">
+            </a>
+            <div class="main_menu" hwm_label=""><a href="{% url 'main' %}">Главное меню</a></div>
+            <div class="not_auth_text_on_buttons2">Игроки</div>
+        </div>
+        <div class="content-wrapper">
+        <div class="players-table-wrapper" style="margin-top:50px;">
     <table id="players-table">
         <thead>
             <tr>
@@ -86,7 +95,8 @@
         <tbody>
         </tbody>
     </table>
-
+        </div>
+        </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const roleMap = {
@@ -118,7 +128,7 @@
                             const row = document.createElement('tr');
                             const roleCell = document.createElement('td');
                             const roleLink = document.createElement('a');
-                            roleLink.href = `{% url 'player' %}?player_id=${player.id}`;
+                            roleLink.href = `{% url 'player' %}?player_id=${player.id}`; 
                             roleLink.textContent = roleMap[player.role] || 'Неизвестно';
                             roleCell.appendChild(roleLink);
                             row.appendChild(roleCell);
@@ -137,7 +147,7 @@
 
                             const statsCell = document.createElement('td');
                             statsCell.innerHTML = `
-                                <a href="https://www.heroeswm.ru/pl_info.php?id=${player.stats.id}">${player.stats.name}</a> (Уровень: ${player.stats.level})<br>
+                                <a href="https://www.heroeswm.ru/pl_info.php?id=${player.stats.id}" target="_blank">${player.stats.name}</a> (Уровень: ${player.stats.level})<br>
                                 Рыцарь: ${player.stats.umka_knight}, Некромант: ${player.stats.umka_necro}, Маг: ${player.stats.umka_mag},<br>
                                 Эльф: ${player.stats.umka_elf}, Варвар: ${player.stats.umka_barbar}, Тёмный эльф: ${player.stats.umka_black_elf},<br>
                                 Демон: ${player.stats.umka_demon}, Гном: ${player.stats.umka_dwarf}, Степной варвар: ${player.stats.umka_step_barb},<br>
@@ -168,5 +178,5 @@
                 .catch(error => console.error('Ошибка запроса:', error));
         });
     </script>
-
+    
 {% endblock %}

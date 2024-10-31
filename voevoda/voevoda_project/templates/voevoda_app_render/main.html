@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <div>MAIN</div>
         <!--
                 Для наполнения страницы контентом нужно сделать несколько API запросов
                 1.
@@ -28,28 +28,52 @@
                         Полученные данные нужно отрендерить. При нажатии на ИМЯ (название клана). Нужно переходить на вкладку clan (href переход на нее есть ниже)
                         но при этом к запросу прибавляется параметр clan_id == [ID из поля выше]
         -->
+    <div class="sh_MenuPanel" style="width: 10px;">
+        <div class="mm_l"></div>
+        <div class="mm_r"></div>
+        <div class="mm_item"><div class="not_auth_text_on_buttons">Главное меню</div></div>
+    </div>
+    <div class="global_container_block" style="width: 500px; margin: 20px auto; height: 400px;"><div class="global_container_block_header"><h1 style="font-size:24px; line-height: 0px;">Добро пожаловать, {{request.session.name}}!</h1></div>
+        
+        <div id="clan-info" class="clan-info"></div>
 
-    <div id="clan-info"></div>
-
-    <div class="url_box">
-        <a href="{% url 'presents' %}">Пресеты</a>
-    </div>
-    <div class="url_box">
-        <a href="{% url 'clan' %}?my=true">Клан</a>
-    </div>
-    <div class="url_box">
-        <a href="{% url 'players' %}">Игроки</a>
-    </div>
-    <div class="url_box">
-        <a href="{% url 'events' %}">Ивенты</a>
-    </div>
-    <div class="url_box">
-        <a href="{% url 'fights' %}">История боев</a>
+        <div class="sidebar">
+            <h2 class="sidebar-title">Меню</h2>
+            <div class="url_box">
+                <a href="{% url 'presents' %}">
+                    <img src="{% static 'voevoda_app/images/presents_icon.png' %}" alt="Пресеты">
+                </a>
+                <a href="{% url 'presents' %}">Пресеты</a>
+            </div>
+            <div class="url_box">
+                <a href="{% url 'clan' %}?my=true">
+                    <img src="{% static 'voevoda_app/images/clan_icon.png' %}" alt="Клан">
+                </a>
+                <a href="{% url 'clan' %}?my=true">Клан</a>
+            </div>
+            <div class="url_box">
+                <a href="{% url 'players' %}">
+                    <img src="{% static 'voevoda_app/images/players_icon.png' %}" alt="Игроки">
+                </a>
+                <a href="{% url 'players' %}">Игроки</a>
+            </div>
+            <div class="url_box">
+                <a href="{% url 'events' %}">
+                    <img src="{% static 'voevoda_app/images/events_icon.png' %}" alt="Ивенты">
+                </a>
+                <a href="{% url 'events' %}">Ивенты</a>
+            </div>
+            <div class="url_box">
+                <a href="{% url 'fights' %}">
+                    <img src="{% static 'voevoda_app/images/fights_icon.png' %}" alt="История боев">
+                </a>
+                <a href="{% url 'fights' %}">История боев</a>
+            </div>            
+        </div>
     </div>
 
     <script>
         const clanId = "{{ request.session.clan_id }}";
-
         const url = `http://127.0.0.1:8000/api/clans/?clan_id=${clanId}`;
 
         fetch(url)
@@ -57,28 +81,29 @@
             .then(data => {
                 if (data.success) {
                     const clan = data.data;
-
                     const clanInfoDiv = document.getElementById('clan-info');
                     let htmlContent = `
-                        <h3>
+                        <h3 class="clan-name">
                             Клан: <a href="{% url 'clan' %}?clan_id=${clan.id}">${clan.name}</a>
-                        </h3>
-                        <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.id}" target="_blank">
-                            <img src="${clan.label}" alt="${clan.name} gif">
-                        </a>
+                        
+                        <div class="clan-img-container">
+                            <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.id}" target="_blank">
+                                <img src="${clan.label}" style="width: 30px;"alt="${clan.name} gif" class="clan-img">
+                            </a>
+                        </div>
+                    </h3>
                     `;
-
                     if (clan.alliance) {
                         htmlContent += `
-                            <h4>Альянс: <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.alliance.id}" target="_blank">${clan.alliance.name}</a></h4>
-                            <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.alliance.id}" target="_blank">
-                                <img src="${clan.alliance.label}" alt="${clan.alliance.name} gif">
-                            </a>
+                            <h4 class="alliance-title">Альянс: <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.alliance.id}" target="_blank">${clan.alliance.name}</a></h4>
+                            <div class="alliance-img-container">
+                                <a href="https://www.heroeswm.ru/clan_info.php?id=${clan.alliance.id}" target="_blank">
+                                    <img src="${clan.alliance.label}" alt="${clan.alliance.name} gif" class="alliance-img">
+                                </a>
+                            </div>
                         `;
                     }
                     clanInfoDiv.innerHTML = htmlContent;
-
-
                 } else {
                     console.error('Ошибка получения данных о клане');
                 }
@@ -89,3 +114,5 @@
     </script>
 
 {% endblock %}
+        
+

@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %} 
 {% block content %}
-        <div>CLAN {{clan_id}}</div>
-        {{ my }}
         <!--
                 {{clan_id}} в данной переменной
                 1)Делаем запрос для получения данных клана
@@ -83,7 +81,6 @@
         <script>
         const my = {{ my|lower }};
         const clanId = {{ clan_id }};
-        console.log('Clan_id:', {{ clan_id }});
         let clanData = null;
         let playersData = [];
 
@@ -95,14 +92,14 @@
         })
         .catch(error => console.error('Ошибка получения данных клана:', error));
 
-        fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}&voevoda_id={{ request.session.voevoda_id }}`)
+        fetch(`http://127.0.0.1:8000/api/players/?clan_id=${clanId}`)
         .then(response => response.json())
         .then(data => {
         console.log('Ответ API для игроков:', data);
-        if (data.success && Array.isArray(data.data)) {
-                let playersData = data.data.sort((a, b) => b.level - a.level);
+        if (data.success && Array.isArray(data.data)) { 
+                let playersData = data.data.sort((a, b) => b.level - a.level);  
                 document.querySelector('#player-count').textContent = `Количество игроков: ${playersData.length}`;
-                renderPlayersTable(playersData, my);
+                renderPlayersTable(playersData, my); 
         } else {
                 console.error('Ожидался массив данных игроков, но получен другой тип данных или ошибка');
         }
@@ -116,16 +113,17 @@
                     <div>Союз: <a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.alliance.id}">
                     <img src="${clanData.alliance.label}" alt="${clanData.alliance.name}"/></a></div>` : '';
                 clanSection.innerHTML = `
-                    <h2>${clanData.name}</h2>
-                    <a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.id}">
-                        <img src="${clanData.label}" alt="${clanData.name}">
-                    </a>
+                    <h2>${clanData.name}<a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.id}">
+                        <img src="${clanData.label}" alt="${clanData.name}"></a></h2>
+                    
+                    
                     ${alliance}
                 `;
             }
         }
 
         function renderPlayersTable(playersData, my) {
+            console.log(my);
             const playersTable = document.getElementById('players-table');
             playersTable.innerHTML = `
                 <thead>
@@ -140,7 +138,7 @@
                 <tbody>
                     ${playersData.map(player => `
                         <tr>
-                                <td><a href="https://www.heroeswm.ru/pl_info.php?id=${player.id}">${player.name}</a></td>
+                                <td><a href="https://www.heroeswm.ru/pl_info.php?id=${player.id}" target="_blank">${player.name}</a></td>
                                 <td>${player.level}</td>
                                 <td>
                                 Рыцарь: ${player.umka_knight}, Некромант: ${player.umka_necro}, Маг: ${player.umka_mag},
@@ -155,9 +153,9 @@
                                 Лидер: ${player.gild_leader}, Кузнец: ${player.gild_blacksmith}, Пушечник: ${player.gild_gunsmith}
                                 </td>
                                 <td>
-                                ${player.person_id == null && my ?
+                                ${player.person_id == null && my ? 
                                         `<button class="invite-btn" data-player-id="${player.id}">Пригласить</button>` : ''}
-                                ${player.person_id != null ?
+                                ${player.person_id != null ? 
                                         `<a href="{% url 'player' %}?player_id=${player.person_id}">Просмотреть</a>` : ''}
                                 </td>
                         </tr>
@@ -183,12 +181,26 @@
             }
         });
     </script>
+    <div class="sh_MenuPanel" style="width: 10px;">
+        <div class="mm_l"></div>
+        <div class="mm_r"></div>
+        <a href="{% url 'main' %}">
+            <img src="{% static 'voevoda_app/images/arrow.png' %}" href="{% url 'main' %}" class="cursor_main_menu">
+        </a>
+        <div class="main_menu" hwm_label=""><a href="{% url 'main' %}">Главное меню</a></div>
+        <div class="not_auth_text_on_buttons2">Клан</div>
+    </div>
 
-    <div id="clan-info"></div>
-
-    <h3>Игроки</h3>
-        <div id="player-count">Количество игроков: 0</div>
-
-    <table id="players-table">
-    </table>
+    <div class="content-wrapper">
+            <div id="clan-info"></div>
+        
+        <h3 style="position:relative; top:-20px; text-shadow: 1px 1px 5px #000;">Игроки</h3>
+        <div id="player-count" style="position:relative; top:-20px; text-shadow: 1px 1px 5px #000;">Количество игроков: 0</div>
+        
+        <div class="players-table-wrapper">
+            <table id="players-table" class="players-table">
+                <!-- Таблица игроков будет динамически рендериться здесь -->
+            </table>
+        </div>
+    </div>
 {% endblock %}

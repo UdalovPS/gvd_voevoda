@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %} 
 {% block content %}
-        <div>Events</div>
         <!--
             1)Выгружаем список всех ивентов
             url: http://127.0.0.1:8000/api/events/
@@ -31,37 +30,51 @@
             Снизу кнопка "СОЗДАТЬ ИВЕНТ" в которая зашита ссылка a href="{% url 'event' %}" >СОЗДАТЬ ИВЕНТ</a>
 
         -->
-    <div style="display: flex;">
-        <div id="finished-events" style="width: 50%;">
-            <h3>Завершенные ивенты</h3>
-        </div>
-        <div id="active-events" style="width: 50%;">
-            <h3>Активные ивенты</h3>
-        </div>
+    <div class="sh_MenuPanel" style="width: 10px;">
+        <div class="mm_l"></div>
+        <div class="mm_r"></div>
+        <a href="{% url 'main' %}">
+            <img src="{% static 'voevoda_app/images/arrow.png' %}" href="{% url 'main' %}" class="cursor_main_menu">
+        </a>
+        <div class="main_menu" hwm_label=""><a href="{% url 'main' %}">Главное меню</a></div>
+        <div class="not_auth_text_on_buttons2">Ивенты</div>
     </div>
 
-    <div class="url_box">
-        <a href="{% url 'event' %}" class="btn btn-primary">СОЗДАТЬ ИВЕНТ</a>
+    <div class="event-container">
+        <div class="events-columns">
+            <div id="finished-events">
+                <h3>Завершенные ивенты</h3>
+            </div>
+            <div id="active-events">
+                <h3>Активные ивенты</h3>
+            </div>
+        </div>
+        <div class="event_box">
+            <a href="{% url 'event' %}" class="btn btn-primary">Создать ивент</a>
+        </div>
     </div>
+        
+
+
 
     <script>
         const voevodaId = "{{ request.session.voevoda_id }}";
         const url = `http://127.0.0.1:8000/api/events/?voevoda_id=${voevodaId}`;
 
         const eventTypeMap = {
-            1: "Атака",
-            2: "Защита"
+            1: { name: "Атака", iconClass: "icon-attack" },
+            2: { name: "Защита", iconClass: "icon-defense" }
         };
-
+        
         const eventStateMap = {
-            1: "Первоначальный сбор",
-            2: "Выбор бойцов",
-            3: "Идет бой",
-            4: "Завершен"
+            1: { name: "Первоначальный сбор", class: "status-1" },
+            2: { name: "Выбор бойцов", class: "status-2" },
+            3: { name: "Идет бой", class: "status-3" },
+            4: { name: "Завершен", class: "status-4" }
         };
 
         function formatDate(timestamp) {
-            const date = new Date(timestamp * 1000);
+            const date = new Date(timestamp * 1000); 
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
@@ -78,8 +91,8 @@
                     const finishedEventsDiv = document.getElementById('finished-events');
                     const activeEventsDiv = document.getElementById('active-events');
                     data.data.forEach(event => {
-                        const eventType = eventTypeMap[event.type] || "Неизвестный тип";
-                        const eventState = eventStateMap[event.state] || "Неизвестное состояние";
+                        const eventType = eventTypeMap[event.type] || { name: "Неизвестный тип", iconClass: "" };
+                        const eventState = eventStateMap[event.state] || { name: "Неизвестное состояние", class: "" };
                         const formattedDate = formatDate(event.date);
                         const eventHtml = `
                             <div class="event">
@@ -88,15 +101,17 @@
                                         ${event.name}
                                     </a>
                                 </h4>
-                                <p>Тип: ${eventType}</p>
-                                <p>Дата: ${formattedDate}</p>
-                                <p>Противник:
-                                    <a href="https://www.heroeswm.ru/pl_info.php?id=${event.enemy.id}">
+                                <div class="event-details">
+                                    <span>Тип: </span><p class="event-type ${eventType.iconClass}">${eventType.name}</p>
+                                    <span>Дата: </span><p class="event-date">${formattedDate}</p>
+                                </div>
+                                <p>Противник: 
+                                    <a href="https://www.heroeswm.ru/clan_info.php?id=${event.enemy.id}" target="_blank">
                                         <img src="${event.enemy.label}">
-                                    </a>
                                     ${event.enemy.name}
+                                </a> 
                                 </p>
-                                <p>Статус: ${eventState}</p>
+                                <span> Статус: </span><p class="status ${eventState.class}"> ${eventState.name}</p>
                             </div>
                             <hr>
                         `;

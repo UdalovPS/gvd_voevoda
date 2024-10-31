@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %} 
 {% block content %}
-        <div>Event</div>
         <!--
             СИТУАЦИЯ 1 - когда создаешь новый ИВЕНТ
 
@@ -271,36 +270,47 @@
           "{% url 'fight' %}?event_id=[ID ивента]"
 
         -->
+        <div class="sh_MenuPanel" style="width: 10px;">
+            <div class="mm_l"></div>
+            <div class="mm_r"></div>
+            <a href="{% url 'main' %}">
+                <img src="{% static 'voevoda_app/images/arrow.png' %}" href="{% url 'main' %}" class="cursor_main_menu">
+            </a>
+            <div class="main_menu" hwm_label=""><a href="{% url 'events' %}">Ивенты</a></div>
+            <div class="not_auth_text_on_buttons2">Ивенты</div>
+        </div>
 
         {% if not event_data %}
-        <form id="event-form">
+        <form id="event-form" class="form-container">
+            <h2>Создание нового ивента</h2>
+            
             <label for="event-name">Название:</label>
-            <input type="text" id="event-name" name="name" required>
+            <input type="text" id="event-name" name="name" required placeholder="Введите название события">
 
             <label for="event-type">Тип события:</label>
             <select id="event-type" name="type" required>
-                <option value="1">Атака</option>
-                <option value="2">Защита</option>
+                <option value="1">⚔️ Атака</option>
+                <option value="2">🛡️ Защита</option>
             </select>
 
             <label for="event-date">Дата и время:</label>
-            <input type="datetime-local" id="event-date" name="date" required>
+            <input type="datetime-local" id="event-date" name="date" style="width: 97%" required>
 
             <label for="event-enemy">Враг:</label>
-            <input type="text" id="event-enemy" name="enemy" placeholder="Введите имя клана..." list="clanList">
+            <input type="text" id="event-enemy" name="enemy" placeholder="Введите имя клана..." list="clanList" autocomplete="off">
             <datalist id="clanList"></datalist>
             <div id="enemy-details"></div>
 
-            <button type="button" id="create-event">Создать ивент</button>
+            <button type="submit" id="create-event">Создать ивент</button>
         </form>
-
+    
         <script>
             let clanSearchTimeout;
             let selectedEnemyId = null;
             const inputField = document.getElementById('event-enemy');
             const clanList = document.getElementById('clanList');
             const enemyDetails = document.getElementById('enemy-details');
-
+    
             inputField.addEventListener('input', function() {
                 clearTimeout(clanSearchTimeout);
                 const query = this.value;
@@ -330,8 +340,8 @@
                         .then(response => response.json())
                         .then(enemy => {
                             enemyDetails.innerHTML = `
-                                <img src="${enemy.data.label}" alt="Враг" />
-                                <p>${enemy.data.name}</p>
+                            <p><img src="${enemy.data.label}" alt="Враг" style="width:20px;"/>
+                                ${enemy.data.name}</p>
                             `;
                         });
                     fetch(`http://127.0.0.1:8000/api/events/?event_id=2`)
@@ -343,12 +353,12 @@
                     selectedEnemyId = null;
                 }
             });
-
+    
             document.getElementById('create-event').addEventListener('click', function() {
                 const name = document.getElementById('event-name').value;
                 const type = document.getElementById('event-type').value;
                 const date = new Date(document.getElementById('event-date').value).getTime()/1000;
-
+    
                 fetch('http://127.0.0.1:8000/api/events/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -366,191 +376,218 @@
                 });
             });
         </script>
-
+    
     {% else %}
-        <div>
-            <h3>{{ event_data.name }}</h3>
-            <p>Тип:
+        <div class="event-state-container">
+            <h3 class="event-title">{{ event_data.name }}</h3>
+            <p class="event-info">Тип:
                 {% if event_data.type == 1 %}
-                    Атака
+                    <span class="icon-attack">Атака</span>
                 {% elif event_data.type == 2 %}
-                    Защита
+                    <span class="icon-defense">Защита</span>
                 {% else %}
-                    Неизвестно
+                    <span class="event-type-unknown">Неизвестно</span>
                 {% endif %}
             </p>
-            <p>Дата: {{ event_data.date|date:"d.m.Y H:i" }}</p>
-            <p>Состояние:
+            <p class="event-info" id="event-data" data-timestamp="{{ event_data.date }}">Дата: </p>
+            <p class="event-info">Состояние:
                 {% if event_data.state == 1 %}
-                    Первоначальный сбор
+                    <span class="status-1">Первоначальный сбор</span>
                 {% elif event_data.state == 2 %}
-                    Выбор бойцов
+                    <span class="status-2">Выбор бойцов</span>
                 {% elif event_data.state == 3 %}
-                    Идет бой
+                    <span class="status-3">Идет бой</span>
                 {% elif event_data.state == 4 %}
-                    Завершен
+                    <span class="status-4">Завершен</span>
                 {% else %}
                     Неизвестно
                 {% endif %}
             </p>
+
+            <script>
+                function formatDate(timestamp) {
+                    const date = new Date(timestamp * 1000); 
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${day}.${month}.${year} ${hours}:${minutes}`;
+                }
+                
+                const activeEventsDiv = document.getElementById('event-data');
+                const timestamp = activeEventsDiv.getAttribute('data-timestamp');
+                activeEventsDiv.textContent = `Дата: ${formatDate(timestamp)}`;
+                console.log(`Дата: ${formatDate(timestamp)}`);
+            </script>
 
             {% if event_data.state == 1 %}
-            <div>
+            <div class="invite-section">
                 <h4>Выберите игроков для приглашения</h4>
                 <form id="invite-form">
-                    <div id="players-list"></div>
-                    <button type="button" id="send-invites" disabled>Отправить приглашения</button>
+                    <div id="players-list" class="players-list"></div>
+                    <button type="submit" id="send-invites" style="width:30%; margin: 10px auto;">Отправить приглашения</button>
                 </form>
+            </div>
 
-                <script>
-                    fetch('http://127.0.0.1:8000/api/persons/?voevoda_id={{ request.session.voevoda_id }}')
-                        .then(response => response.json())
-                        .then(data => {
-                            const activePlayers = data.data.filter(person => person.activity);
-                            const playersList = document.getElementById('players-list');
 
-                            activePlayers.forEach(person => {
-                                const personRole = (person.role === 1) ? "Воевода" :
-                                                   (person.role === 2) ? "Помощник воеводы" :
-                                                   (person.role === 100) ? "Игрок" : "Неизвестная роль";
-
-                                const personHtml = `
-                                    <div>
-                                        <input type="checkbox" id="person-${person.id}" name="person" value="${person.id}">
-                                        <label for="person-${person.id}">
-                                            ${person.telegram_username} - ${personRole}
-                                            <span>${person.stats.name} (${person.stats.level} уровень)</span>
-                                        </label>
-                                    </div>
-                                `;
-
-                                playersList.insertAdjacentHTML('beforeend', personHtml);
-                            });
-
-                            document.getElementById('send-invites').disabled = false;
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при загрузке списка игроков:', error);
-                            alert('Не удалось загрузить список игроков.');
+            <script>
+                const clanId = "{{ request.session.clan_id }}";
+                fetch(`http://127.0.0.1:8000/api/persons/?voevoda_id={{ request.session.voevoda_id }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const activePlayers = data.data.filter(person => person.activity);
+                        const playersList = document.getElementById('players-list');
+                        activePlayers.forEach(person => {
+                            const personRole = (person.role === 1) ? "Воевода" :
+                                            (person.role === 2) ? "Помощник воеводы" :
+                                            (person.role === 100) ? "Игрок" : "Неизвестная роль";
+                            const personHtml = `
+                                <div class="player-card">
+                                    <input type="checkbox" id="person-${person.id}" name="person" value="${person.id}">
+                                    <label for="person-${person.id}">
+                                        ${person.telegram_username} - ${personRole}
+                                        <span class="player-stats">${person.stats.name} (${person.stats.level} уровень)</span>
+                                    </label>
+                                </div>
+                            `;
+                            playersList.insertAdjacentHTML('beforeend', personHtml);
                         });
-
-                    document.getElementById('send-invites').addEventListener('click', function() {
-                        const selectedPersons = Array.from(document.querySelectorAll('input[name="person"]:checked'))
-                            .map(input => input.value);
-
-                        const sendInvitesButton = document.getElementById('send-invites');
-                        sendInvitesButton.disabled = true;
-                        sendInvitesButton.innerText = "Отправка...";
-
-                        const sendInvitations = selectedPersons.map(personId => {
-                            return fetch('http://127.0.0.1:8000/api/invites/', {
-                                method: 'POST',
+                        document.getElementById('send-invites').disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при загрузке списка игроков:', error);
+                        alert('Не удалось загрузить список игроков.');
+                    });
+            
+                document.getElementById('send-invites').addEventListener('click', function() {
+                    const selectedPersons = Array.from(document.querySelectorAll('input[name="person"]:checked'))
+                        .map(input => input.value);
+                    const sendInvitesButton = document.getElementById('send-invites');
+                    sendInvitesButton.disabled = true;
+                    sendInvitesButton.innerText = "Отправка...";
+                    const sendInvitations = selectedPersons.map(personId => {
+                        return fetch('http://127.0.0.1:8000/api/invites/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                event_id: "{{ event_data.id }}",
+                                person_id: personId
+                            })
+                        });
+                    });
+                    Promise.all(sendInvitations)
+                        .then(() => {
+                            return fetch('http://127.0.0.1:8000/api/events/', {
+                                method: 'PATCH',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     event_id: "{{ event_data.id }}",
-                                    person_id: personId
+                                    state: 2
                                 })
                             });
+                        })
+                        .then(() => {
+                            window.location.href = `{% url 'event' %}?event_id={{ event_data.id }}`;
+                        })
+                        .catch(error => {
+                            console.error('Ошибка при отправке приглашений или обновлении события:', error);
+                            alert('Произошла ошибка при отправке приглашений. Попробуйте снова.');
                         });
-
-                        Promise.all(sendInvitations)
-                            .then(() => {
-                                return fetch('http://127.0.0.1:8000/api/events/', {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        event_id: "{{ event_data.id }}",
-                                        state: 2
-                                    })
-                                });
-                            })
-                            .then(() => {
-                                window.location.href = `{% url 'event' %}?event_id={{ event_data.id }}`;
-                            })
-                            .catch(error => {
-                                console.error('Ошибка при отправке приглашений или обновлении события:', error);
-                                alert('Произошла ошибка при отправке приглашений. Попробуйте снова.');
-                            });
-                    });
-                </script>
+                });
+            </script>
             </div>
             {% endif %}
 
             {% if event_data.state == 2 %}
             <div>
-                <h4>Информация об ивенте</h4>
-                <p>Название ивента: {{ event_data.name }}</p>
-                <p>Тип ивента: {% if event_data.type == 1 %}Атака{% elif event_data.type == 2 %}Защита{% endif %}</p>
-                <p>Дата: {{ event_data.date | date:"d.m.Y H:i" }}</p>
-
-                <h4>Приглашённые игроки</h4>
-                <div id="invited-players-list"></div>
-
-                <h4>Игроки соперника</h4>
-                <div id="enemy-players-list"></div>
-
+            <div class="invite-section">
+                <h4 class="section-title">Приглашённые игроки</h4>
+                <div id="invited-players-list" class="players-list"></div>
+    
+                <h4 class="section-title">Игроки соперника</h4>
+                <div id="enemy-players-list" class="players-list"></div>
+    
                 {% if event_data.type == 2 %}
-                    <h4>Информация о клане соперника</h4>
-                    <div id="enemy-clan-info"></div>
-
-                    <div id="enemy-alliance-players-container"></div>
+    
+                    <div id="enemy-alliance-players-container" class="alliance-players-container"></div>
                 {% endif %}
-
-
-                <h4>Выбор игроков для боя</h4>
-
-                {% if event_data.type == 1 %}
-                    <div>
-                        <label>Атака - Игрок 1 (Уровень):</label>
-                        <select id="attacker-1-level" onchange="filterPlayers('attacker-1', this.value, 'my')"></select>
-                        <select id="attacker-1"></select>
+    
+                <div class="clan-section">
+                    <div class="clan-attack">
+                        <h4>Клан атаки</h4>
+                        <div id="attack-clan-info" class="e-clan-info"></div>
                     </div>
-                    <div>
-                        <label>Атака - Игрок 2 (Уровень):</label>
-                        <select id="attacker-2-level" onchange="filterPlayers('attacker-2', this.value, 'my')"></select>
-                        <select id="attacker-2"></select>
+                    <div class="clan-defense">
+                        <h4>Клан защиты</h4>
+                        <div id="defense-clan-info" class="e-clan-info"></div>
                     </div>
-
-                    <div>
-                        <label>Защита - Игрок 1 (Уровень):</label>
-                        <select id="defender-1-level" onchange="filterPlayers('defender-1', this.value, 'enemy')"></select>
-                        <select id="defender-1"></select>
-                    </div>
-                    <div>
-                        <label>Защита - Игрок 2 (Уровень):</label>
-                        <select id="defender-2-level" onchange="filterPlayers('defender-2', this.value, 'enemy')"></select>
-                        <select id="defender-2"></select>
-                    </div>
-                {% elif event_data.type == 2 %}
-                    <div>
-                        <label>Защита - Игрок 1 (Уровень):</label>
-                        <select id="defender-1-level" onchange="filterPlayers('defender-1', this.value, 'my')"></select>
-                        <select id="defender-1"></select>
-                    </div>
-                    <div>
-                        <label>Защита - Игрок 2 (Уровень):</label>
-                        <select id="defender-2-level" onchange="filterPlayers('defender-2', this.value, 'my')"></select>
-                        <select id="defender-2"></select>
-                    </div>
-
-                    <div>
-                        <label>Атака - Игрок 1 (Уровень):</label>
-                        <select id="attacker-1-level" onchange="filterPlayers('attacker-1', this.value, 'enemy')"></select>
-                        <select id="attacker-1"></select>
-                    </div>
-                    <div>
-                        <label>Атака - Игрок 2 (Уровень):</label>
-                        <select id="attacker-2-level" onchange="filterPlayers('attacker-2', this.value, 'enemy')"></select>
-                        <select id="attacker-2"></select>
-                    </div>
-                {% endif %}
-
-                <button id="invite-to-fight">Пригласить на бой</button>
+                </div>
+                
+                <h4 class="section-title">Выбор игроков для боя</h4>
+                <div class="player-selection-container">
+                    {% if event_data.type == 1 %}
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 1:</label>
+                                <select id="attacker-1-level" onchange="filterPlayers('attacker-1', this.value, 'my')" class="level-select"></select>
+                                <select id="attacker-1" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 2:</label>
+                                <select id="attacker-2-level" onchange="filterPlayers('attacker-2', this.value, 'my')" class="level-select"></select>
+                                <select id="attacker-2" class="player-select"></select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 1:</label>
+                                <select id="defender-1-level" onchange="filterPlayers('defender-1', this.value, 'enemy')" class="level-select"></select>
+                                <select id="defender-1" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 2:</label>
+                                <select id="defender-2-level" onchange="filterPlayers('defender-2', this.value, 'enemy')" class="level-select"></select>
+                                <select id="defender-2" class="player-select"></select>
+                            </div>
+                        </div>
+                    {% elif event_data.type == 2 %}
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 1:</label>
+                                <select id="defender-1-level" onchange="filterPlayers('defender-1', this.value, 'my')" class="level-select"></select>
+                                <select id="defender-1" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 2:</label>
+                                <select id="defender-2-level" onchange="filterPlayers('defender-2', this.value, 'my')" class="level-select"></select>
+                                <select id="defender-2" class="player-select"></select>
+                            </div>
+                        </div>
+                
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 1:</label>
+                                <select id="attacker-1-level" onchange="filterPlayers('attacker-1', this.value, 'enemy')" class="level-select"></select>
+                                <select id="attacker-1" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 2:</label>
+                                <select id="attacker-2-level" onchange="filterPlayers('attacker-2', this.value, 'enemy')" class="level-select"></select>
+                                <select id="attacker-2" class="player-select"></select>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                
+    
+                <button type="submit" id='invite-to-fight' style="width: auto; margin: 20px auto;">Пригласить на бой</button>
 
                 <script>
                     const eventId = "{{ event_data.id }}";
-                    let myPlayers = [];
-                    let enemyPlayers = [];
+                    let myPlayers = [];  
+                    let enemyPlayers = []; 
 
                     function filterPlayers(selectId, selectedLevel, team) {
                         const selectElement = document.getElementById(selectId);
@@ -582,6 +619,48 @@
                         }
                     }
 
+                    function fetchClanData(type, clanId) {
+                        console.log(clanId);
+                        fetch(`http://127.0.0.1:8000/api/clans/?clan_id=${clanId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const clanContainer = document.getElementById(type + '-clan-info');
+
+                                const clanLink = document.createElement('a');
+                                clanLink.href = `https://www.heroeswm.ru/clan_info.php?id=${data.data.id}`;
+                                clanLink.target = '_blank';
+
+                                const clanImage = document.createElement('img');
+                                clanImage.src = data.data.label;
+                                clanImage.alt = data.data.name;
+
+                                const clanName =  document.createElement('span');
+                                clanName.textContent = data.data.name;
+
+                                clanLink.appendChild(clanImage);
+                                clanLink.appendChild(clanName);
+                                clanContainer.appendChild(clanLink);
+
+                                if (data.data.alliance) {
+                                    const allianceLink = document.createElement('a');
+                                    allianceLink.href = `https://www.heroeswm.ru/clan_info.php?id=${data.data.alliance.id}`;
+                                    allianceLink.target = '_blank';
+
+                                    const allianceImage = document.createElement('img');
+                                    allianceImage.src = data.data.alliance.label;
+                                    allianceImage.alt = data.data.alliance.name;
+
+                                    const allianceClanName =  document.createElement('span');
+                                    allianceClanName.textContent = data.data.alliance.name;
+
+                                    allianceLink.appendChild(allianceImage);
+                                    allianceLink.appendChild(allianceClanName);
+                                    clanContainer.appendChild(allianceLink);
+                                }
+                            })
+                            .catch(error => console.error('Ошибка загрузки данных клана:', error));
+                    }
+
                     fetch(`http://127.0.0.1:8000/api/events/?event_id=${eventId}`)
                         .then(response => response.json())
                         .then(eventData => {
@@ -603,7 +682,7 @@
 
                                         const playerHtml = `
                                             <div>
-                                                ${invite.person_id.stats.name} (${invite.person_id.stats.level} уровень) - ${playerState}
+                                                &nbsp&nbsp&nbsp${invite.person_id.stats.name} (${invite.person_id.stats.level} уровень) - ${playerState}
                                             </div>
                                         `;
                                         invitedPlayersList.insertAdjacentHTML('beforeend', playerHtml);
@@ -627,20 +706,20 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     const enemyPlayersList = document.getElementById('enemy-players-list');
-                                    enemyPlayers = data.data;
-                                    let enemyLevels = new Set();
+                                    enemyPlayers = data.data; 
+                                    let enemyLevels = new Set(); 
 
                                     data.data.forEach(player => {
                                         const playerHtml = `
                                             <div>
-                                                ${player.name} (${player.level} уровень)
+                                                &nbsp&nbsp&nbsp${player.name} (${player.level} уровень)
                                             </div>
                                         `;
                                         enemyPlayersList.insertAdjacentHTML('beforeend', playerHtml);
 
                                         enemyLevels.add(player.level);
                                     });
-
+                                    
                                     const enemyLevelSelects = eventType === 1 ? ['defender-1-level', 'defender-2-level'] : ['attacker-1-level', 'attacker-2-level'];
                                     enemyLevelSelects.forEach(selectId => {
                                         const selectElement = document.getElementById(selectId);
@@ -652,47 +731,38 @@
                                         updateLevelAndPlayers(selectId.replace('-level', ''), 'enemy');
                                     });
                                 });
-
                             if (eventType === 2) {
+                                fetchClanData('attack', "{{ request.session.clan_id }}"); 
+                                fetchClanData('defense', eventData.data.enemy.id); 
                                 fetch('http://127.0.0.1:8000/api/clans/?clan_id=' + eventData.data.enemy.id)
                                     .then(response => response.json())
                                     .then(clanData => {
-                                        const enemyClanInfo = document.getElementById('enemy-clan-info');
-                                        const clanHtml = `
-                                            <div>
-                                                <a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.data.id}">
-                                                    <img src="${clanData.data.label}" alt="Клан ${clanData.data.name}">
-                                                </a>
-                                                <p>Клан: ${clanData.data.name}</p>
-                                            </div>
-                                        `;
-                                        enemyClanInfo.insertAdjacentHTML('beforeend', clanHtml);
                                         if (clanData.data.alliance) {
-
+                                            
                                             const enemyAlliancePlayersContainer = document.getElementById('enemy-alliance-players-container');
 
                                             const allianceHeader = `<h4>Союзники соперника</h4>`;
                                             enemyAlliancePlayersContainer.insertAdjacentHTML('beforeend', allianceHeader);
 
-                                            const enemyAlliancePlayersList = `<div id="enemy-alliance-players-list"></div>`;
+                                            const enemyAlliancePlayersList = `<div id="enemy-alliance-players-list" class="players-list"></div>`;
                                             enemyAlliancePlayersContainer.insertAdjacentHTML('beforeend', enemyAlliancePlayersList);
 
                                             fetch('http://127.0.0.1:8000/api/players/?clan_id=' + clanData.data.alliance.id)
                                                 .then(response => response.json())
                                                 .then(allianceData => {
-                                                    let allianceLevels = new Set();
+                                                    let allianceLevels = new Set(); 
                                                     const enemyAlliancePlayersListElement = document.getElementById('enemy-alliance-players-list');
                                                     allianceData.data.forEach(player => {
                                                         const playerHtml = `
                                                             <div>
-                                                                ${player.name} (${player.level} уровень)
+                                                                &nbsp&nbsp&nbsp${player.name} (${player.level} уровень)
                                                             </div>
                                                         `;
                                                         enemyAlliancePlayersListElement.insertAdjacentHTML('beforeend', playerHtml);
 
                                                         allianceLevels.add(player.level);
 
-                                                        enemyPlayers.push(player);
+                                                        enemyPlayers.push(player);  
                                                     });
 
                                                     const enemyLevelSelects = eventType === 1 ? ['defender-1-level', 'defender-2-level'] : ['attacker-1-level', 'attacker-2-level'];
@@ -709,6 +779,10 @@
                                         }
                                     });
                             }
+                            else{
+                                fetchClanData('attack', eventData.data.enemy.id); 
+                                fetchClanData('defense', "{{ request.session.clan_id }}"); 
+                            }
                         });
 
                     document.getElementById('invite-to-fight').addEventListener('click', function() {
@@ -724,7 +798,7 @@
                                 body: JSON.stringify({
                                     event_id: eventId,
                                     person_id: playerId,
-                                    state: 4
+                                    state: 4 
                                 })
                             });
                         };
@@ -754,25 +828,27 @@
                         });
                     });
                 </script>
+                            </div>
             </div>
         {% endif %}
         {% if event_data.state == 3 %}
+        <div class="invite-section">
         <h4>Приглашённые игроки:</h4>
         <div id="invited-players-list"></div>
 
-        {% if event_data.state == 3 %}
-            <button id="finish-button">Завершить</button>
-        {% endif %}
+            <button type="submit" id="finish-button" style="width: auto; margin: 30px auto;">Завершить</button>
+            </div>
+
         <script>
 
-        const eventId = "{{ event_data.id }}";
+        const eventId = "{{ event_data.id }}"; 
 
         fetch('http://127.0.0.1:8000/api/invites/?event_id=' + eventId)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                console.log(data); 
                 const invitedPlayersList = document.getElementById('invited-players-list');
-                invitedPlayersList.innerHTML = '';
+                invitedPlayersList.innerHTML = ''; 
 
                 const selectedInvites = data.data.filter(invite => invite.state === 4);
 
@@ -786,7 +862,7 @@
                 });
             })
             .catch(error => {
-                console.error('Ошибка при получении данных:', error);
+                console.error('Ошибка при получении данных:', error); 
             });
 
 
@@ -804,7 +880,7 @@
                 });
             });
         </script>
-
+        
         {% endif %}
 
     {% endif %}

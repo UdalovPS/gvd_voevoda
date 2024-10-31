@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %} 
 {% block content %}
-<div>Presets</div>
 <!--
             1)Запрашиваем список всех пресетов
               url: http://127.0.0.1:8000/api/presets/
@@ -31,11 +31,23 @@
                 При нажатии на кнопку переходим по URL
                 <a href="{% url 'present' %}" >Пресет</a>
         -->
+<div class="sh_MenuPanel" style="width: 10px;">
+    <div class="mm_l"></div>
+    <div class="mm_r"></div>
+    <a href="{% url 'main' %}">
+        <img src="{% static 'voevoda_app/images/arrow.png' %}" href="{% url 'main' %}" class="cursor_main_menu">
+    </a>
+    <div class="main_menu" hwm_label=""><a href="{% url 'main' %}">Главное меню</a></div>
+    <div class="not_auth_text_on_buttons2">Пресеты</div>
+</div>
 
-<div id="presets-list"></div>
+<div class="content-container">
 
-<div class="url_box">
-    <a href="{% url 'present' %}" >Добавить пресет</a>
+    <div id="presets-list" class="presets-list"></div>
+
+    <div class="button-container">
+        <a href="{% url 'present' %}" class="add-preset-button">Добавить пресет</a>
+    </div>
 </div>
 
 <script>
@@ -65,13 +77,13 @@
                     const fractionName = fractionMap[preset.fraction];
                     const presetHtml = `
                         <div class="preset">
-                            <h3>
+                            <h3 class="preset-title">
                                 <a href="{% url 'present' %}?preset_id=${preset.id}">
                                     ${preset.name}
                                 </a>
                             </h3>
-                            <p>Фракция: ${fractionName}</p>
-                            <p>${preset.description}</p>
+                            <div class="fraction">Фракция: ${fractionName}</div>
+                            <p class="description">${preset.description}</p>
                         </div>
                     `;
                     presetsListDiv.innerHTML += presetHtml;
