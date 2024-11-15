@@ -692,7 +692,8 @@ class FightsLogic(Redis):
             "defence_1_pers_preset": PresetsLogic().serialize_one_preset_data(data=data.defence_1_pers_preset),
             "defence_2_pers_preset": PresetsLogic().serialize_one_preset_data(data=data.defence_2_pers_preset),
             "result": data.result,
-            "description": data.description
+            "description": data.description,
+            "loss_persent": data.loss_persent
         }
 
     def add_fight(self, in_data: dict):

@@ -173,6 +173,7 @@ class FightsModel(models.Model):
     defence_2_pers_preset = models.ForeignKey("PresetsModel", null=True, blank=True, on_delete=models.SET_NULL,
                                         verbose_name="пресет 2-го игрока защиты", related_name="defence_2_presets")
     result = models.IntegerField(choices=RESULT_CHOICER, verbose_name="Результат")
+    loss_persent = models.IntegerField(default=0, verbose_name="% потерь")
     description = models.TextField(verbose_name="Комментарий")
 
     def __str__(self):

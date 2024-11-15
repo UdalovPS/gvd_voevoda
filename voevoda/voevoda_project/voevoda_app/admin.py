@@ -107,6 +107,7 @@ class FightsModelAdmin(admin.ModelAdmin):
         "defence_2_pers_preset",
         "result",
         "description",
+        "loss_persent"
     ]
 
     list_filter = ['voevoda_id', "type"]
