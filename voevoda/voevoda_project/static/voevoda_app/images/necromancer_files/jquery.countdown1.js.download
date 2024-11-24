@@ -1,0 +1,125 @@
+jQuery.fn.countdown = function( date , settings )
+{
+	var countdown_settings =
+	{
+		lang:
+		{
+			years:   ['год', 'года', 'лет'],
+			months:  ['мес¤ц', 'мес¤ца', 'мес¤цев'],
+			days:    ['день', 'дн¤', 'дней'],
+			hours:   ['час', 'часа', 'часов'],
+			minutes: ['минута', 'минуты', 'минут'],
+			seconds: ['секунда', 'секунды', 'секунд'],
+			plurar:  function(n)
+			{
+				return (n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
+			}
+		},
+		prefix: "ќсталось: ",
+		finish: "¬сЄ",
+		vy: "no" ,
+		vm: "no"
+	};
+
+	countdown_settings = jQuery.extend( countdown_settings, settings );
+
+	var setRed = false;
+
+	var timeDifference = function( begin, end )
+	{
+        if (end < begin)
+		{
+		    return false;
+	    }
+
+		var
+		days	= end.getDate() - begin.getDate(),
+		months	= end.getMonth() - begin.getMonth(),
+		years	= end.getYear() - begin.getYear(),
+		hours	= end.getHours() - begin.getHours(),
+		minutes	= end.getMinutes() - begin.getMinutes(),
+		seconds	= end.getSeconds() - begin.getSeconds();
+
+		if( seconds < 0 )
+		{
+			minutes--;
+			seconds += 60;
+		}
+		if( minutes < 0 )
+		{
+			hours--;
+			minutes += 60;
+		}
+		if( hours < 0 )
+		{
+			days--;
+			hours += 24;
+		}
+		if( days < 0 )
+		{
+			months--;
+			if( begin.getMonth() == 0 || begin.getMonth() == 2 || begin.getMonth() == 4 || begin.getMonth() == 6 || begin.getMonth() == 7 || begin.getMonth() == 9 || begin.getMonth() == 11)
+			{
+				days += 31;
+			} else if( begin.getMonth() == 1 )
+			{
+				if( begin.getYear()%4 == 0 )
+				{
+					days += 29;
+				} else
+				{
+					days += 28;
+				}
+			} else
+			{
+				days += 30;
+			}
+		}
+
+		if( months < 0 )
+		{
+			years--;
+			months+=12;
+		}
+
+		if( years < 0 )
+		{
+			years = 0;
+		}
+		var diff = { years: years, months: months, days: days, hours: hours, minutes: minutes, seconds: seconds } ;
+		var result = new Array();
+		var onlySec = true;
+		for( i in diff )
+		{
+			if( i=="years" && countdown_settings.vy == "no" )
+				continue;
+			if( i=="months" && countdown_settings.vm == "no" )
+				continue;
+			result.push( ( diff[i] < 10 ? '0' : '' )+diff[i] );
+		}
+
+		return result.join(':');
+	};
+
+	var elem = $(this);
+	var timeUpdate = function()
+	{
+	
+		var mtime = new Date(new Date().toUTCString().substr(0, 25));
+		mtime.setMinutes(mtime.getMinutes() + 180);
+		
+		
+		var s = timeDifference( mtime, date );
+		
+		if( s.length )
+		{
+			elem.html( countdown_settings.prefix + s + '' );
+		} else
+		{
+			clearInterval( timer );
+			elem.html( countdown_settings.finish );
+		}
+	};
+	timeUpdate();
+	var timer = setInterval( timeUpdate, 1000 );
+};

@@ -38,6 +38,7 @@
                     "state": целочисленное значение (1 - "Первоначальный сбор", 2 - "Выбор бойцов", 3 - "Идет бой", 4 - "Завершен")
                 }
                 Далее необходимо произвести редирект на url {% url 'event' %}?event_id=[ID который пришел в ответ на POST запрос]
+            ________________________________________________________________________________________________________________________
 
             СИТУАЦИЯ 2 (когда ивент создан и state = 1)
                 url: http://127.0.0.1:8000/api/persons/
@@ -107,6 +108,7 @@
                 Если type ивента == 2 (защита), то отображаем только игроков у которых stats.clan == request.session.clan_id
 
                 НАПРОТИВ каждого игрока ставим поле, в котором можно поставить галочку (ОТправить приглашение)
+                !Рендерим только тех игроков у которых поле activity == true
 
                 СНИЗУ ДЕЛАЕМ КНОПКУ "ОТПРАВИТЬ ПРИГЛАШЕНИЕ"
                 По нажатию на кнопку собираются все значения с галочками и в цикле отправляются запросы
@@ -596,6 +598,134 @@
                         </div>
                     {% endif %}
                 </div>
+                <h4 class="section-title">Выбор игроков для боя</h4>
+                <div class="player-selection-container">
+                    {% if event_data.type == 1 %}
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 3:</label>
+                                <select id="attacker-3-level" onchange="filterPlayers('attacker-3', this.value, 'my')" class="level-select"></select>
+                                <select id="attacker-3" class="player-select"></select>
+                                <select id="attack_3_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 4:</label>
+                                <select id="attacker-4-level" onchange="filterPlayers('attacker-4', this.value, 'my')" class="level-select"></select>
+                                <select id="attacker-4" class="player-select"></select>
+                                <select id="attack_4_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 3:</label>
+                                <select id="defender-3-level" onchange="filterPlayers('defender-3', this.value, 'enemy')" class="level-select"></select>
+                                <select id="defender-3" class="player-select"></select>
+                                <select id="defense_3_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 4:</label>
+                                <select id="defender-4-level" onchange="filterPlayers('defender-4', this.value, 'enemy')" class="level-select"></select>
+                                <select id="defender-4" class="player-select"></select>
+                                <select id="defense_4_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+                    {% elif event_data.type == 2 %}
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 3:</label>
+                                <select id="defender-3-level" onchange="filterPlayers('defender-3', this.value, 'my')" class="level-select"></select>
+                                <select id="defender-3" class="player-select"></select>
+                                <select id="defense_3_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 6:</label>
+                                <select id="defender-4-level" onchange="filterPlayers('defender-4', this.value, 'my')" class="level-select"></select>
+                                <select id="defender-4" class="player-select"></select>
+                                <select id="defense_4_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 3:</label>
+                                <select id="attacker-3-level" onchange="filterPlayers('attacker-3', this.value, 'enemy')" class="level-select"></select>
+                                <select id="attacker-3" class="player-select"></select>
+                                <select id="attack_3_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 4:</label>
+                                <select id="attacker-4-level" onchange="filterPlayers('attacker-4', this.value, 'enemy')" class="level-select"></select>
+                                <select id="attacker-4" class="player-select"></select>
+                                <select id="attack_4_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <h4 class="section-title">Выбор игроков для боя</h4>
+                <div class="player-selection-container">
+                    {% if event_data.type == 1 %}
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 1:</label>
+                                <select id="attacker-5-level" onchange="filterPlayers('attacker-5', this.value, 'my')" class="level-select"></select>
+                                <select id="attacker-5" class="player-select"></select>
+                                <select id="attack_5_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 6:</label>
+                                <select id="attacker-6-level" onchange="filterPlayers('attacker-6', this.value, 'my')" class="level-select"></select>
+                                <select id="attacker-6" class="player-select"></select>
+                                <select id="attack_6_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 5:</label>
+                                <select id="defender-5-level" onchange="filterPlayers('defender-5', this.value, 'enemy')" class="level-select"></select>
+                                <select id="defender-5" class="player-select"></select>
+                                <select id="defense_5_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 6:</label>
+                                <select id="defender-6-level" onchange="filterPlayers('defender-6', this.value, 'enemy')" class="level-select"></select>
+                                <select id="defender-6" class="player-select"></select>
+                                <select id="defense_6_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+                    {% elif event_data.type == 2 %}
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 5:</label>
+                                <select id="defender-5-level" onchange="filterPlayers('defender-5', this.value, 'my')" class="level-select"></select>
+                                <select id="defender-5" class="player-select"></select>
+                                <select id="defense_5_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Защита - Игрок 6:</label>
+                                <select id="defender-6-level" onchange="filterPlayers('defender-6', this.value, 'my')" class="level-select"></select>
+                                <select id="defender-6" class="player-select"></select>
+                                <select id="defense_6_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 5:</label>
+                                <select id="attacker-5-level" onchange="filterPlayers('attacker-5', this.value, 'enemy')" class="level-select"></select>
+                                <select id="attacker-5" class="player-select"></select>
+                                <select id="attack_5_pers_preset" class="player-select"></select>
+                            </div>
+                            <div class="player-select-container">
+                                <label>Атака - Игрок 6:</label>
+                                <select id="attacker-6-level" onchange="filterPlayers('attacker-6', this.value, 'enemy')" class="level-select"></select>
+                                <select id="attacker-6" class="player-select"></select>
+                                <select id="attack_6_pers_preset" class="player-select"></select>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
 
 
                 <button type="submit" id='invite-to-fight' style="width: auto; margin: 20px auto;">Пригласить на бой</button>
@@ -755,7 +885,7 @@
                             myLevels.add(invite.person_id.stats.level);
                         });
 
-                        const levelSelects = eventType === 1 ? ['attacker-1-level', 'attacker-2-level'] : ['defender-1-level', 'defender-2-level'];
+                        const levelSelects = eventType === 1 ? ['attacker-1-level', 'attacker-2-level', 'attacker-3-level', 'attacker-4-level', 'attacker-5-level', 'attacker-6-level'] : ['defender-1-level', 'defender-2-level', 'defender-3-level', 'defender-4-level', 'defender-5-level', 'defender-6-level'];
                         levelSelects.forEach(selectId => {
                             const selectElement = document.getElementById(selectId);
                             myLevels.forEach(level => {
@@ -774,7 +904,7 @@
                             });
                         });
                     });
-                    loadPresets('attack_1_pers_preset', 'attack_2_pers_preset');
+                    loadPresets('attack_1_pers_preset', 'attack_2_pers_preset', 'attack_3_pers_preset', 'attack_4_pers_preset', 'attack_5_pers_preset', 'attack_6_pers_preset');
             });
 
                             fetch('http://127.0.0.1:8000/api/players/?clan_id=' + eventData.data.enemy.id)
@@ -795,7 +925,7 @@
                                         enemyLevels.add(player.level);
                                     });
 
-                                    const enemyLevelSelects = eventType === 1 ? ['defender-1-level', 'defender-2-level'] : ['attacker-1-level', 'attacker-2-level'];
+                                    const enemyLevelSelects = eventType === 1 ? ['defender-1-level', 'defender-2-level', 'defender-3-level', 'defender-4-level', 'defender-5-level', 'defender-6-level'] : ['attacker-1-level', 'attacker-2-level', 'attacker-3-level', 'attacker-4-level', 'attacker-5-level', 'attacker-6-level'];
                                     enemyLevelSelects.forEach(selectId => {
                                         const selectElement = document.getElementById(selectId);
                                         enemyLevels.forEach(level => {
@@ -805,7 +935,7 @@
 
                                         updateLevelAndPlayers(selectId.replace('-level', ''), 'enemy');
                                     });
-                                    loadPresets('defense_1_pers_preset', 'defense_2_pers_preset');
+                                    loadPresets('defense_1_pers_preset', 'defense_2_pers_preset', 'defense_3_pers_preset', 'defense_4_pers_preset', 'defense_5_pers_preset', 'defense_6_pers_preset');
                                 });
                             if (eventType === 2) {
                                 fetchClanData('attack', eventData.data.enemy.id);
@@ -841,7 +971,7 @@
                                                         enemyPlayers.push(player);
                                                     });
 
-                                                    const enemyLevelSelects = eventType === 1 ? ['defender-1-level', 'defender-2-level'] : ['attacker-1-level', 'attacker-2-level'];
+                                                    const enemyLevelSelects = eventType === 1 ? ['defender-1-level', 'defender-2-level', 'defender-3-level', 'defender-4-level', 'defender-5-level', 'defender-6-level'] : ['attacker-1-level', 'attacker-2-level', 'attacker-3-level', 'attacker-4-level', 'attacker-5-level', 'attacker-6-level'];
                                                     enemyLevelSelects.forEach(selectId => {
                                                         const selectElement = document.getElementById(selectId);
                                                         allianceLevels.forEach(level => {
@@ -864,8 +994,16 @@
                     document.getElementById('invite-to-fight').addEventListener('click', function() {
                         const attacker1 = document.getElementById('attacker-1').value;
                         const attacker2 = document.getElementById('attacker-2').value;
+                        const attacker3 = document.getElementById('attacker-3').value;
+                        const attacker4 = document.getElementById('attacker-1').value;
+                        const attacker5 = document.getElementById('attacker-2').value;
+                        const attacker6 = document.getElementById('attacker-3').value;
                         const defender1 = document.getElementById('defender-1').value;
                         const defender2 = document.getElementById('defender-2').value;
+                        const defender3 = document.getElementById('defender-3').value;
+                        const defender4 = document.getElementById('defender-1').value;
+                        const defender5 = document.getElementById('defender-2').value;
+                        const defender6 = document.getElementById('defender-3').value;
 
                         const inviteFight = (playerId) => {
                             return fetch('http://127.0.0.1:8000/api/invites/', {
@@ -882,8 +1020,16 @@
                         Promise.all([
                             inviteFight(attacker1),
                             inviteFight(attacker2),
+                            inviteFight(attacker3),
+                            inviteFight(attacker4),
+                            inviteFight(attacker5),
+                            inviteFight(attacker6),
                             inviteFight(defender1),
-                            inviteFight(defender2)
+                            inviteFight(defender2),
+                            inviteFight(defender3),
+                            inviteFight(defender4),
+                            inviteFight(defender5),
+                            inviteFight(defender6)
                         ])
                         .then(() => {
                             return fetch('http://127.0.0.1:8000/api/events/', {
@@ -904,7 +1050,7 @@
                         });
                     });
 
-                    function loadPresets(selectId1, selectId2) {
+                    function loadPresets(selectId1, selectId2, selectId3, selectId4, selectId5, selectId6) {
                     const voevodaId = "{{ request.session.voevoda_id }}";
 
                     fetch(`http://127.0.0.1:8000/api/presets/?voevoda_id=${voevodaId}`, {
@@ -918,11 +1064,19 @@
                     .then(presets => {
                         const select1 = document.getElementById(selectId1);
                         const select2 = document.getElementById(selectId2);
+                        const select3 = document.getElementById(selectId3);
+                        const select4 = document.getElementById(selectId4);
+                        const select5 = document.getElementById(selectId5);
+                        const select6 = document.getElementById(selectId6);
 
                         presets.data.forEach(preset => {
                             const optionHtml = `<option value="${preset.id}">${preset.name} (${getFractionName(preset.fraction)})</option>`;
                             select1.insertAdjacentHTML('beforeend', optionHtml);
                             select2.insertAdjacentHTML('beforeend', optionHtml);
+                            select3.insertAdjacentHTML('beforeend', optionHtml);
+                            select4.insertAdjacentHTML('beforeend', optionHtml);
+                            select5.insertAdjacentHTML('beforeend', optionHtml);
+                            select6.insertAdjacentHTML('beforeend', optionHtml);
                         });
 
                         if (select1.options.length > 0) {
@@ -931,6 +1085,22 @@
 
                         if (select2.options.length > 0) {
                             select2.options[0].selected = true;
+                        }
+
+                        if (select3.options.length > 0) {
+                            select3.options[0].selected = true;
+                        }
+
+                        if (select4.options.length > 0) {
+                            select4.options[0].selected = true;
+                        }
+
+                        if (select5.options.length > 0) {
+                            select5.options[0].selected = true;
+                        }
+
+                        if (select6.options.length > 0) {
+                            select6.options[0].selected = true;
                         }
                     })
                 }

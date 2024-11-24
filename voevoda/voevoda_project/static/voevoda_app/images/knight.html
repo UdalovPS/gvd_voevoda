@@ -1,0 +1,739 @@
+
+<!-- saved from url=(0048)https://daily.heroeswm.ru/players/o/3/id/4300799 -->
+<html style="margin-right: 0px;overflow-x:auto" data-qb-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1251"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Рейтинг всех игроков - HWM Daily</title><link href="./knight_files/css" rel="stylesheet">
+<link href="./knight_files/index8n.css" type="text/css" rel="stylesheet">
+<link href="./knight_files/index7.css" type="text/css" rel="stylesheet">
+<script src="./knight_files/jquery.2.1.4.min.js.download" type="text/javascript"></script>
+<script src="./knight_files/jquery.blockUI.js.download" type="text/javascript"></script>
+<script src="./knight_files/jquery.countdown1.js.download" type="text/javascript"></script>
+<script src="./knight_files/index7.js.download" type="text/javascript"></script>
+<style>
+  
+
+th A {
+	text-decoration:none;
+	color:var(--main-fcolor);
+	font-size:12px;
+}
+
+table.report td, table.report th {
+	font-size:11px !important;
+	padding:4px 2px !important;
+}
+html, html * {
+    FONT-SIZE: 11px;
+}
+
+table {
+	border-collapse:collapse;
+	overflow: auto;
+}
+
+.style1
+	{
+    	font-size:8px;
+    	color:#696156;
+    	}
+
+td {
+    min-width:25px;
+	white-space: nowrap;
+}
+
+td a {
+	text-decoration: none;
+	color: var(--hwm-hero-color);
+	FONT-FAMILY: verdana,geneva,arial cyr;
+	FONT-SIZE: 9pt;
+}
+
+input {
+	vertical-align: middle;
+}
+</style><style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '&#10620;';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style><style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '&#10620;';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style></head>
+
+<body class="light">
+<script>
+if (localStorage.getItem("toggled") == "dark") {
+	document.querySelector("body").classList.add("dark");
+} else {
+	document.querySelector("body").classList.add("light");
+}
+</script>
+<center>
+
+<div class="header_main">
+	<div class="header_inner" style="width:100%">
+		<div class="header_wrapper">
+			<div align="left" class="header_item header_logo">			
+				<a href="https://daily.heroeswm.ru/" style="text-decoration: none;">
+					<span class="logo1">HWM</span>
+					<span class="logo2">DAILY</span>
+				</a>
+			</div>
+			<div class="header_item header_menu">
+				<div class="header-menu">
+					<div class="header-menu_item">
+						<a href="https://daily.heroeswm.ru/bu">Блоги</a>
+					</div>
+				<div class="header-menu_item">
+					<a href="https://daily.heroeswm.ru/bash">Bash</a>
+				</div>
+				<div class="header-menu_item"><a href="https://daily.heroeswm.ru/d/video-ext/">Видео</a></div>
+				<div class="header-menu_item"><a href="https://daily.heroeswm.ru/n/services">Сервисы</a></div>
+				<div class="header-menu_item"><a href="https://daily.heroeswm.ru/d/">Теги</a></div>
+				<div class="header-menu_item"><a href="https://daily.heroeswm.ru/newscom.php">ENG</a></div>
+				<div class="header-menu_item"><a href="https://daily.heroeswm.ru/s.php"><img width="20px" src="./knight_files/ico-search.svg"></a></div>
+			</div>
+		</div></div></div></div>
+
+
+<br>
+<b>Warning</b>:  Undefined array key "th_eng" in <b>/home/daily/services/players.php</b> on line <b>454</b><br>
+<!--LiveInternet counter--><script type="text/javascript">
+new Image().src = "//counter.yadro.ru/hit?r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";h"+escape(document.title.substring(0,150))+
+";"+Math.random();</script><!--/LiveInternet--><br><form style="background-color:transparent" action="https://daily.heroeswm.ru/services/search.php" method="post">
+<a href="https://daily.heroeswm.ru/players/o/3/id/4300799?ru"><img width="25px" src="./knight_files/ru.png"></a>
+<a href="https://daily.heroeswm.ru/players/o/3/id/4300799?en"><img width="25px" src="./knight_files/en.png"></a><br><br>
+<input type="hidden" name="from" value="1"><input type="hidden" name="lang" value="1">Combat level: <input name="lvlp" size="5" maxlength="2" value="12"> -&gt; <input name="lvln" size="5" maxlength="2" value="23">
+<input type="checkbox" id="male" name="male" value="1" checked="">&#9794;
+<input type="checkbox" id="female" name="female" value="1" checked="">&#9792;
+<br><br><input type="checkbox" id="active" name="active" value="1">Online for the last 30 days
+<br><br>Displayed per page: <input name="perpage" value="50">     
+<input type="checkbox" id="exp" name="exp" value="1"> <label for="exp">Exact values</label>
+<br><br>
+<select name="ordtype"><option value="id">id</option><option value="exp">Experience</option><option value="bAll">Combats fought</option><option value="bWin">Combats victories</option><option value="f1" selected="">Knight</option><option value="f2">Necromancer</option><option value="f3">Wizard</option><option value="f4">Elf</option><option value="f5">Barbarian</option><option value="f6">Dark elf</option><option value="f7">Demon</option><option value="f8">Dwarf</option><option value="f9">Tribal</option><option value="f10">Pharaoh</option><option value="sum">Skill points</option><option value="go">Hunters' guild</option><option value="gr">Laborers' guild</option><option value="gk">Gamblers' guild</option><option value="gv">Thieves' guild</option><option value="grj">Rangers' guild</option><option value="gn">Mercenaries' guild</option><option value="gt">Commanders' guild</option><option value="gs">Watchers' guild</option><option value="gi">Adventurers' guild</option><option value="gl">Leaders' Guild</option><option value="gkuz">Smiths' guild</option><option value="gorj">Enchanters' guild</option><option value="weapon">Weaponsmith</option><option value="armor">Armorer</option><option value="jew">jeweler</option><option value="rLose">Roulette winnings total</option><option value="rWin">Roulette bets total</option><option value="rAll">Roulette balance</option><option value="cLose">Cards winnings</option><option value="cWin">Cards losses</option><option value="cAll1">Cards balance</option><option value="stat1">Parameters</option><option value="score">Pumping score</option><option value="mult">Increased experience</option></select>
+
+<select name="napr">	
+<option value="1" selected="">Descending</option>
+<option value="0">Ascending</option>
+</select><br><br>Coefficient of initiative: 
+<select name="stat">	
+	<option value="0" selected="">1</option>
+	<option value="2">0.5</option>
+	<option value="3">0.33</option>
+	<option value="1">2</option>
+	<option value="4">0</option>	
+</select><br><br><table class="report"><tbody><tr class="even"><td width="50px"><img src="./knight_files/r1.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r2.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r3.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r4.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r5.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r6.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r7.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r8.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r9.png" width="15" height="15" border="0" align="absmiddle"></td><td width="50px"><img src="./knight_files/r10.png" width="15" height="15" border="0" align="absmiddle"></td></tr><tr class="odd"><td><input type="checkbox" name="f1" value="1" checked=""></td><td><input type="checkbox" name="f2" value="1" checked=""></td><td><input type="checkbox" name="f3" value="1" checked=""></td><td><input type="checkbox" name="f4" value="1" checked=""></td><td><input type="checkbox" name="f5" value="1" checked=""></td><td><input type="checkbox" name="f6" value="1" checked=""></td><td><input type="checkbox" name="f7" value="1" checked=""></td><td><input type="checkbox" name="f8" value="1" checked=""></td><td><input type="checkbox" name="f9" value="1" checked=""></td><td><input type="checkbox" name="f10" value="1" checked=""></td></tr><tr class="even"><td>&nbsp;11.94%&nbsp;</td><td>&nbsp;9.78%&nbsp;</td><td>&nbsp;6.6%&nbsp;</td><td>&nbsp;24.05%&nbsp;</td><td>&nbsp;9.16%&nbsp;</td><td>&nbsp;19.04%&nbsp;</td><td>&nbsp;4.88%&nbsp;</td><td>&nbsp;8.65%&nbsp;</td><td>&nbsp;4.52%&nbsp;</td><td>&nbsp;1.36%&nbsp;</td></tr></tbody></table><br><input type="checkbox" id="i1" name="i1" value="1"> <label for="i1">Roulette data</label><br><input type="checkbox" id="i2" name="i2" value="1"> <label for="i2">Cards data</label><br><br>Military clan:<select name="clan"><option value="0" selected="">Any</option><option value="-1">no clan</option><option value="13">#13 (81)</option><option value="14">#14 (144)</option><option value="15">#15 (142)</option><option value="17">#17 (143)</option><option value="18">#18 (148)</option><option value="26">#26 (46)</option><option value="27">#27 (145)</option><option value="41">#41 (136)</option><option value="42">#42 (17)</option><option value="44">#44 (4)</option><option value="57">#57 (147)</option><option value="63">#63 (147)</option><option value="73">#73 (148)</option><option value="85">#85 (52)</option><option value="86">#86 (12)</option><option value="88">#88 (146)</option><option value="100">#100 (14)</option><option value="104">#104 (147)</option><option value="126">#126 (84)</option><option value="149">#149 (6)</option><option value="154">#154 (19)</option><option value="170">#170 (40)</option><option value="176">#176 (4)</option><option value="179">#179 (145)</option><option value="211">#211 (9)</option><option value="236">#236 (116)</option><option value="249">#249 (149)</option><option value="250">#250 (5)</option><option value="256">#256 (48)</option><option value="259">#259 (8)</option><option value="276">#276 (140)</option><option value="292">#292 (10)</option><option value="302">#302 (146)</option><option value="326">#326 (144)</option><option value="336">#336 (1)</option><option value="346">#346 (150)</option><option value="361">#361 (62)</option><option value="381">#381 (11)</option><option value="387">#387 (93)</option><option value="407">#407 (148)</option><option value="414">#414 (147)</option><option value="433">#433 (76)</option><option value="464">#464 (85)</option><option value="468">#468 (35)</option><option value="476">#476 (11)</option><option value="485">#485 (17)</option><option value="492">#492 (30)</option><option value="493">#493 (144)</option><option value="522">#522 (148)</option><option value="528">#528 (13)</option><option value="590">#590 (4)</option><option value="599">#599 (12)</option><option value="644">#644 (108)</option><option value="691">#691 (24)</option><option value="707">#707 (2)</option><option value="708">#708 (35)</option><option value="713">#713 (19)</option><option value="719">#719 (23)</option><option value="728">#728 (126)</option><option value="756">#756 (71)</option><option value="760">#760 (4)</option><option value="766">#766 (14)</option><option value="767">#767 (3)</option><option value="770">#770 (16)</option><option value="774">#774 (31)</option><option value="782">#782 (131)</option><option value="783">#783 (116)</option><option value="785">#785 (38)</option><option value="823">#823 (148)</option><option value="825">#825 (123)</option><option value="834">#834 (62)</option><option value="846">#846 (148)</option><option value="883">#883 (63)</option><option value="928">#928 (150)</option><option value="933">#933 (69)</option><option value="951">#951 (21)</option><option value="965">#965 (145)</option><option value="997">#997 (143)</option><option value="1041">#1041 (34)</option><option value="1089">#1089 (8)</option><option value="1138">#1138 (69)</option><option value="1158">#1158 (8)</option><option value="1180">#1180 (114)</option><option value="1209">#1209 (149)</option><option value="1227">#1227 (15)</option><option value="1253">#1253 (10)</option><option value="1254">#1254 (140)</option><option value="1271">#1271 (143)</option><option value="1306">#1306 (21)</option><option value="1317">#1317 (146)</option><option value="1332">#1332 (48)</option><option value="1335">#1335 (4)</option><option value="1355">#1355 (18)</option><option value="1365">#1365 (9)</option><option value="1382">#1382 (79)</option><option value="1409">#1409 (38)</option><option value="1436">#1436 (85)</option><option value="1437">#1437 (37)</option><option value="1464">#1464 (43)</option><option value="1488">#1488 (122)</option><option value="1497">#1497 (4)</option><option value="1499">#1499 (31)</option><option value="1512">#1512 (140)</option><option value="1519">#1519 (147)</option><option value="1535">#1535 (82)</option><option value="1540">#1540 (9)</option><option value="1597">#1597 (148)</option><option value="1631">#1631 (109)</option><option value="1658">#1658 (11)</option><option value="1685">#1685 (62)</option><option value="1712">#1712 (111)</option><option value="1758">#1758 (28)</option><option value="1787">#1787 (128)</option><option value="1790">#1790 (57)</option><option value="1803">#1803 (65)</option><option value="1806">#1806 (24)</option><option value="1814">#1814 (7)</option><option value="1849">#1849 (25)</option><option value="1861">#1861 (52)</option><option value="1888">#1888 (0)</option><option value="1945">#1945 (10)</option><option value="1966">#1966 (30)</option><option value="2037">#2037 (10)</option><option value="2052">#2052 (2)</option><option value="2082">#2082 (23)</option><option value="2120">#2120 (20)</option><option value="2135">#2135 (8)</option><option value="2140">#2140 (74)</option><option value="2163">#2163 (54)</option><option value="2194">#2194 (23)</option><option value="2196">#2196 (27)</option><option value="2213">#2213 (27)</option><option value="2226">#2226 (99)</option><option value="2230">#2230 (145)</option><option value="2264">#2264 (1)</option><option value="2266">#2266 (49)</option><option value="2282">#2282 (2)</option><option value="2301">#2301 (83)</option><option value="2302">#2302 (149)</option><option value="2303">#2303 (41)</option><option value="2304">#2304 (13)</option><option value="2334">#2334 (2)</option><option value="2336">#2336 (26)</option><option value="2338">#2338 (16)</option><option value="2344">#2344 (6)</option><option value="2422">#2422 (13)</option><option value="2448">#2448 (24)</option><option value="2454">#2454 (33)</option><option value="2464">#2464 (21)</option><option value="2473">#2473 (25)</option><option value="2517">#2517 (146)</option><option value="2544">#2544 (43)</option><option value="2577">#2577 (0)</option><option value="2620">#2620 (75)</option><option value="2640">#2640 (26)</option><option value="2687">#2687 (35)</option><option value="2694">#2694 (22)</option><option value="2728">#2728 (2)</option><option value="2735">#2735 (149)</option><option value="2745">#2745 (127)</option><option value="2814">#2814 (74)</option><option value="2830">#2830 (7)</option><option value="2854">#2854 (28)</option><option value="2870">#2870 (70)</option><option value="2894">#2894 (20)</option><option value="2902">#2902 (69)</option><option value="2911">#2911 (17)</option><option value="2920">#2920 (16)</option><option value="2928">#2928 (18)</option><option value="2931">#2931 (2)</option><option value="2939">#2939 (97)</option><option value="2949">#2949 (8)</option><option value="2954">#2954 (5)</option><option value="2985">#2985 (19)</option><option value="2999">#2999 (3)</option><option value="3002">#3002 (25)</option><option value="3015">#3015 (30)</option><option value="3023">#3023 (35)</option><option value="3137">#3137 (17)</option><option value="3146">#3146 (3)</option><option value="3161">#3161 (104)</option><option value="3201">#3201 (6)</option><option value="3206">#3206 (10)</option><option value="3208">#3208 (7)</option><option value="3225">#3225 (3)</option><option value="3229">#3229 (2)</option><option value="3254">#3254 (18)</option><option value="3303">#3303 (142)</option><option value="3304">#3304 (21)</option><option value="3305">#3305 (149)</option><option value="3319">#3319 (1)</option><option value="3333">#3333 (46)</option><option value="3337">#3337 (2)</option><option value="3340">#3340 (8)</option><option value="3344">#3344 (7)</option><option value="3346">#3346 (146)</option><option value="3352">#3352 (65)</option><option value="3367">#3367 (6)</option><option value="3444">#3444 (5)</option><option value="3452">#3452 (44)</option><option value="3474">#3474 (1)</option><option value="3509">#3509 (29)</option><option value="3533">#3533 (13)</option><option value="3564">#3564 (29)</option><option value="3572">#3572 (99)</option><option value="3583">#3583 (16)</option><option value="3589">#3589 (24)</option><option value="3607">#3607 (109)</option><option value="3670">#3670 (50)</option><option value="3695">#3695 (136)</option><option value="3732">#3732 (2)</option><option value="3751">#3751 (0)</option><option value="3816">#3816 (31)</option><option value="3837">#3837 (9)</option><option value="3855">#3855 (11)</option><option value="3928">#3928 (27)</option><option value="3975">#3975 (140)</option><option value="3995">#3995 (23)</option><option value="4001">#4001 (40)</option><option value="4082">#4082 (5)</option><option value="4129">#4129 (40)</option><option value="4142">#4142 (5)</option><option value="4149">#4149 (5)</option><option value="4159">#4159 (31)</option><option value="4201">#4201 (72)</option><option value="4222">#4222 (17)</option><option value="4260">#4260 (33)</option><option value="4354">#4354 (2)</option><option value="4370">#4370 (44)</option><option value="4414">#4414 (80)</option><option value="4486">#4486 (92)</option><option value="4538">#4538 (33)</option><option value="4571">#4571 (15)</option><option value="4601">#4601 (10)</option><option value="4742">#4742 (32)</option><option value="4776">#4776 (15)</option><option value="4938">#4938 (67)</option><option value="4973">#4973 (19)</option><option value="4976">#4976 (24)</option><option value="5000">#5000 (2)</option><option value="5001">#5001 (48)</option><option value="5041">#5041 (147)</option><option value="5049">#5049 (22)</option><option value="5053">#5053 (18)</option><option value="5058">#5058 (6)</option><option value="5063">#5063 (143)</option><option value="5095">#5095 (15)</option><option value="5140">#5140 (1)</option><option value="5152">#5152 (144)</option><option value="5169">#5169 (123)</option><option value="5203">#5203 (20)</option><option value="5283">#5283 (42)</option><option value="5349">#5349 (115)</option><option value="5376">#5376 (28)</option><option value="5385">#5385 (130)</option><option value="5390">#5390 (53)</option><option value="5411">#5411 (1)</option><option value="5458">#5458 (11)</option><option value="5497">#5497 (30)</option><option value="5555">#5555 (1)</option><option value="5569">#5569 (22)</option><option value="5581">#5581 (25)</option><option value="5588">#5588 (125)</option><option value="5604">#5604 (26)</option><option value="5625">#5625 (12)</option><option value="5689">#5689 (37)</option><option value="5722">#5722 (147)</option><option value="5728">#5728 (37)</option><option value="5736">#5736 (4)</option><option value="5755">#5755 (0)</option><option value="5756">#5756 (73)</option><option value="5757">#5757 (13)</option><option value="5775">#5775 (0)</option><option value="5788">#5788 (0)</option><option value="5851">#5851 (4)</option><option value="5880">#5880 (39)</option><option value="5888">#5888 (0)</option><option value="5890">#5890 (10)</option><option value="5941">#5941 (53)</option><option value="5955">#5955 (1)</option><option value="6006">#6006 (22)</option><option value="6055">#6055 (91)</option><option value="6085">#6085 (9)</option><option value="6109">#6109 (42)</option><option value="6118">#6118 (126)</option><option value="6145">#6145 (33)</option><option value="6241">#6241 (19)</option><option value="6259">#6259 (47)</option><option value="6285">#6285 (51)</option><option value="6299">#6299 (16)</option><option value="6311">#6311 (87)</option><option value="6346">#6346 (1)</option><option value="6387">#6387 (13)</option><option value="6396">#6396 (6)</option><option value="6425">#6425 (13)</option><option value="6533">#6533 (1)</option><option value="6561">#6561 (3)</option><option value="6628">#6628 (3)</option><option value="6629">#6629 (25)</option><option value="6633">#6633 (21)</option><option value="6712">#6712 (1)</option><option value="6721">#6721 (17)</option><option value="6749">#6749 (9)</option><option value="6794">#6794 (68)</option><option value="6812">#6812 (11)</option><option value="6815">#6815 (49)</option><option value="7102">#7102 (24)</option><option value="7110">#7110 (83)</option><option value="7127">#7127 (34)</option><option value="7153">#7153 (67)</option><option value="7181">#7181 (77)</option><option value="7183">#7183 (48)</option><option value="7185">#7185 (20)</option><option value="7227">#7227 (2)</option><option value="7279">#7279 (104)</option><option value="7360">#7360 (16)</option><option value="7365">#7365 (36)</option><option value="7382">#7382 (39)</option><option value="7395">#7395 (22)</option><option value="7425">#7425 (11)</option><option value="7490">#7490 (146)</option><option value="7654">#7654 (1)</option><option value="7705">#7705 (136)</option><option value="7736">#7736 (26)</option><option value="7777">#7777 (148)</option><option value="8008">#8008 (40)</option><option value="8026">#8026 (87)</option><option value="8048">#8048 (1)</option><option value="8100">#8100 (2)</option><option value="8109">#8109 (8)</option><option value="8160">#8160 (32)</option><option value="8212">#8212 (109)</option><option value="8224">#8224 (44)</option><option value="8237">#8237 (24)</option><option value="8251">#8251 (11)</option><option value="8284">#8284 (40)</option><option value="8382">#8382 (29)</option><option value="8415">#8415 (41)</option><option value="8433">#8433 (128)</option><option value="8477">#8477 (1)</option><option value="8489">#8489 (27)</option><option value="8502">#8502 (75)</option><option value="8591">#8591 (1)</option><option value="8652">#8652 (29)</option><option value="8657">#8657 (42)</option><option value="8722">#8722 (10)</option><option value="8921">#8921 (13)</option><option value="9017">#9017 (8)</option><option value="9100">#9100 (16)</option><option value="9200">#9200 (1)</option><option value="9213">#9213 (2)</option><option value="9228">#9228 (1)</option><option value="9259">#9259 (6)</option><option value="9320">#9320 (11)</option><option value="9378">#9378 (3)</option><option value="9426">#9426 (149)</option><option value="9595">#9595 (150)</option><option value="9681">#9681 (146)</option><option value="9739">#9739 (2)</option><option value="9775">#9775 (115)</option><option value="9809">#9809 (9)</option><option value="9836">#9836 (2)</option><option value="9960">#9960 (11)</option><option value="9970">#9970 (142)</option><option value="10017">#10017 (16)</option><option value="10058">#10058 (9)</option><option value="10079">#10079 (44)</option><option value="10088">#10088 (1)</option><option value="10131">#10131 (21)</option><option value="10133">#10133 (5)</option><option value="10136">#10136 (5)</option><option value="10177">#10177 (61)</option><option value="10273">#10273 (54)</option><option value="10299">#10299 (3)</option><option value="10337">#10337 (3)</option><option value="10399">#10399 (149)</option><option value="10482">#10482 (10)</option><option value="10518">#10518 (1)</option><option value="10557">#10557 (147)</option><option value="10573">#10573 (3)</option><option value="10592">#10592 (150)</option><option value="10605">#10605 (3)</option><option value="10608">#10608 (22)</option><option value="10621">#10621 (2)</option><option value="10624">#10624 (46)</option><option value="10649">#10649 (41)</option><option value="10651">#10651 (2)</option><option value="10669">#10669 (6)</option><option value="10682">#10682 (16)</option><option value="10721">#10721 (125)</option><option value="10726">#10726 (1)</option><option value="10751">#10751 (1)</option><option value="10800">#10800 (5)</option><option value="10803">#10803 (74)</option><option value="10877">#10877 (149)</option><option value="10879">#10879 (3)</option><option value="10886">#10886 (131)</option><option value="10932">#10932 (107)</option><option value="10982">#10982 (106)</option><option value="11043">#11043 (6)</option><option value="11093">#11093 (122)</option><option value="11096">#11096 (97)</option><option value="11139">#11139 (26)</option><option value="11146">#11146 (17)</option><option value="11164">#11164 (22)</option><option value="11222">#11222 (4)</option><option value="11223">#11223 (12)</option><option value="11229">#11229 (1)</option><option value="11251">#11251 (3)</option><option value="11252">#11252 (1)</option><option value="11273">#11273 (2)</option><option value="11323">#11323 (3)</option><option value="11353">#11353 (52)</option><option value="11370">#11370 (27)</option><option value="11387">#11387 (70)</option><option value="11427">#11427 (7)</option><option value="11446">#11446 (9)</option><option value="11532">#11532 (50)</option><option value="11560">#11560 (16)</option><option value="11576">#11576 (120)</option><option value="11588">#11588 (45)</option><option value="11591">#11591 (64)</option><option value="11666">#11666 (1)</option><option value="11685">#11685 (1)</option><option value="11703">#11703 (1)</option><option value="11740">#11740 (40)</option><option value="11749">#11749 (19)</option><option value="11767">#11767 (88)</option><option value="11794">#11794 (27)</option><option value="11823">#11823 (1)</option><option value="11827">#11827 (36)</option><option value="11839">#11839 (2)</option><option value="11940">#11940 (2)</option><option value="11974">#11974 (132)</option><option value="12007">#12007 (4)</option><option value="12031">#12031 (5)</option><option value="12045">#12045 (148)</option><option value="12056">#12056 (1)</option><option value="12062">#12062 (1)</option><option value="12092">#12092 (8)</option><option value="12100">#12100 (19)</option><option value="12167">#12167 (2)</option><option value="12186">#12186 (1)</option><option value="12201">#12201 (7)</option><option value="12223">#12223 (33)</option><option value="12234">#12234 (147)</option><option value="12235">#12235 (2)</option><option value="12286">#12286 (2)</option><option value="12293">#12293 (2)</option><option value="12343">#12343 (1)</option><option value="12378">#12378 (1)</option><option value="12385">#12385 (139)</option><option value="12395">#12395 (65)</option><option value="12436">#12436 (3)</option><option value="12439">#12439 (1)</option><option value="12447">#12447 (149)</option><option value="12450">#12450 (33)</option><option value="12497">#12497 (146)</option><option value="12530">#12530 (1)</option><option value="12532">#12532 (9)</option><option value="12555">#12555 (22)</option><option value="12583">#12583 (2)</option><option value="12646">#12646 (1)</option><option value="12677">#12677 (1)</option><option value="12695">#12695 (3)</option><option value="12715">#12715 (1)</option><option value="12730">#12730 (25)</option></select><br><br>
+Ник: <input name="nick" value="Knight"><br><br><input type="submit" value="Search"><br></form>Characters matched: 80471<br>Pages total: 1610<br>Displayed per page: 50<br><br><div style="width: min-content;"><div class="pages"><table><tbody><tr><td><a href="https://daily.heroeswm.ru/players/o/3/p/1091">«</a></td><td><a href="https://daily.heroeswm.ru/players/o/3">1</a></td><td class="emp">...</td> <td><a href="https://daily.heroeswm.ru/players/o/3/p/1090">1090</a></td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1091">1091</a></td><th>1092</th><td><a href="https://daily.heroeswm.ru/players/o/3/p/1093">1093</a></td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1094">1094</a></td> <td class="emp">...</td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1610">1610</a></td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1093">»</a></td></tr></tbody></table></div><table class="report"><thead><tr><th>№</th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/36/n/1">id</a></th><th>Ник</th><th>online</th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/3/n/1"><img width="15" src="./knight_files/r1(1).png"></a>&nbsp;<img src="./knight_files/desc.png"></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/0">Exp</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/1">Combats</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/2">Victories</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/4"><img src="./knight_files/r2.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/5"><img src="./knight_files/r3.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/6"><img src="./knight_files/r4.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/7"><img src="./knight_files/r5.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/8"><img src="./knight_files/r6.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/9"><img src="./knight_files/r7.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/10"><img src="./knight_files/r8.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/11"><img src="./knight_files/r9.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/12"><img src="./knight_files/r10.png" width="15" height="15" border="0" align="absmiddle"></a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/13">Skill<br>points</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/14">HG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/15">LG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/16">GG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/17">TG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/18">RG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/19">MG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/20">CG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/21">WG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/22">AG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/23">GL</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/24">SG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/25">EG</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/26">Weap</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/27">Arm</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/28">Jc</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/35">Par</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/37">Score</a></th><th><a href="https://daily.heroeswm.ru/players/id/4300799/o/38">%</a></th></tr></thead><tbody><tr class="even"><td>54551</td><td>3732418</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=3732418">Kakain</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r9.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>30-04-13</td><td style="color:333;background: #a1cade">1</td><td>9433710</td><td>4873</td><td>4073</td><td>0</td><td>0</td><td>0</td><td>9</td><td>2</td><td>0</td><td>0</td><td>3</td><td>0</td><td>3713</td><td>6</td><td>5</td><td>0</td><td>3</td><td>0</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>13</td><td>35.5</td><td>0</td></tr><tr class="odd"><td>54552</td><td>3747554</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=10399"><img src="./knight_files/l_10399.webp" width="20" height="15" border="0" alt="#10399" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=3747554">Baromir</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>26739534</td><td>11934</td><td>10291</td><td>3</td><td>0</td><td>0</td><td>3</td><td>11</td><td>2</td><td>1</td><td>2</td><td>1</td><td>10574</td><td>9</td><td>6</td><td>7</td><td>3</td><td>0</td><td>9</td><td>0</td><td>1</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>21</td><td>52.5</td><td>0</td></tr><tr class="even"><td>54553</td><td>3759430</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=3759430">Warlllock</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>21-05-20</td><td style="color:333;background: #a1cade">1</td><td>8568873</td><td>5322</td><td>4150</td><td>0</td><td>0</td><td>0</td><td>2</td><td>9</td><td>0</td><td>6</td><td>1</td><td>0</td><td>5502</td><td>6</td><td>5</td><td>8</td><td>5</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td>2</td><td>0</td><td>1</td><td>15</td><td>37.5</td><td>0</td></tr><tr class="odd"><td>54554</td><td>3961452</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=3961452">latino</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r8.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>15-02-21</td><td style="color:333;background: #a1cade">1</td><td>17837285</td><td>8958</td><td>7642</td><td>2</td><td>0</td><td>6</td><td>3</td><td>5</td><td>1</td><td>10</td><td>0</td><td>0</td><td>8433</td><td>8</td><td>6</td><td>1</td><td>6</td><td>0</td><td>6</td><td>0</td><td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>45.0</td><td>0</td></tr><tr class="even"><td>54555</td><td>4057631</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4057631">Панас</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r103.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>05-01-15</td><td style="color:333;background: #a1cade">1</td><td>10833791</td><td>3557</td><td>2727</td><td>0</td><td>10</td><td>0</td><td>3</td><td>4</td><td>4</td><td>0</td><td>1</td><td>0</td><td>6118</td><td>6</td><td>7</td><td>1</td><td>0</td><td>0</td><td>4</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>12</td><td>38.0</td><td>0</td></tr><tr class="odd"><td>54556</td><td>4120135</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4120135">_ТёмныйВладыка_</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r7.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>10-04-19</td><td style="color:333;background: #a1cade">1</td><td>5934803</td><td>3604</td><td>3149</td><td>1</td><td>0</td><td>4</td><td>1</td><td>1</td><td>9</td><td>1</td><td>1</td><td>0</td><td>4327</td><td>6</td><td>5</td><td>3</td><td>0</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>30.0</td><td>0</td></tr><tr class="even"><td>54557</td><td>4128679</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4128679">фонор</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r5.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>15-02-24</td><td style="color:333;background: #a1cade">1</td><td>19578057</td><td>9673</td><td>5107</td><td>0</td><td>0</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>6690</td><td>8</td><td>7</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>34.0</td><td>-15</td></tr><tr class="odd"><td>54558</td><td>4160732</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4160732">Хмельник</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>09-10-24</td><td style="color:333;background: #a1cade">1</td><td>21692807</td><td>9579</td><td>8366</td><td>0</td><td>4</td><td>10</td><td>9</td><td>0</td><td>0</td><td>0</td><td>4</td><td>0</td><td>11079</td><td>9</td><td>6</td><td>12</td><td>0</td><td>0</td><td>7</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>15</td><td>43.0</td><td>0</td></tr><tr class="even"><td>54559</td><td>4183519</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4183519">MMGP</a></b>&nbsp;[16]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>17-11-24</td><td style="color:333;background: #a1cade">1</td><td>45848711</td><td>13740</td><td>10564</td><td>2</td><td>3</td><td>5</td><td>3</td><td>11</td><td>1</td><td>0</td><td>0</td><td>1</td><td>17123</td><td>9</td><td>8</td><td>1</td><td>6</td><td>1</td><td>10</td><td>0</td><td>1</td><td>0</td><td>4</td><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>26</td><td>62.0</td><td>0</td></tr><tr class="odd"><td>54560</td><td>4715427</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4715427">Lord&nbsp;Draxmorn</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r3.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>30-07-16</td><td style="color:333;background: #a1cade">1</td><td>10223418</td><td>5611</td><td>4488</td><td>1</td><td>8</td><td>3</td><td>1</td><td>1</td><td>1</td><td>2</td><td>1</td><td>0</td><td>2931</td><td>7</td><td>6</td><td>3</td><td>0</td><td>0</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>12</td><td>37.0</td><td>0</td></tr><tr class="even"><td>54561</td><td>4785171</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4785171">Black_Jack</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>11-01-21</td><td style="color:333;background: #a1cade">1</td><td>6028361</td><td>4105</td><td>3477</td><td>1</td><td>1</td><td>9</td><td>2</td><td>2</td><td>1</td><td>5</td><td>1</td><td>0</td><td>3669</td><td>6</td><td>9</td><td>0</td><td>3</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>15</td><td>34.5</td><td>0</td></tr><tr class="odd"><td>54562</td><td>4919716</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4919716">LordAwe</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r8.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>06-06-24</td><td style="color:333;background: #a1cade">1</td><td>31884256</td><td>14332</td><td>10827</td><td>2</td><td>0</td><td>3</td><td>1</td><td>3</td><td>2</td><td>12</td><td>3</td><td>0</td><td>19593</td><td>9</td><td>6</td><td>1</td><td>0</td><td>2</td><td>7</td><td>0</td><td>2</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>19</td><td>57.0</td><td>0</td></tr><tr class="even"><td>54563</td><td>4919809</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=4919809">AngeAnge</a></b>&nbsp;[16]&nbsp;<img src="./knight_files/r5.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>11-11-24</td><td style="color:333;background: #a1cade">1</td><td>62092896</td><td>26406</td><td>19149</td><td>1</td><td>0</td><td>0</td><td>11</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>14715</td><td>10</td><td>8</td><td>0</td><td>0</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>11</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>21</td><td>56.5</td><td>-1</td></tr><tr class="odd"><td>54564</td><td>5024257</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5024257">Красава</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>27-07-14</td><td style="color:333;background: #a1cade">1</td><td>9992565</td><td>4113</td><td>3310</td><td>0</td><td>2</td><td>9</td><td>3</td><td>0</td><td>0</td><td>3</td><td>0</td><td>0</td><td>5368</td><td>6</td><td>5</td><td>1</td><td>0</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>35.0</td><td>0</td></tr><tr class="even"><td>54565</td><td>5034742</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=126"><img src="./knight_files/l_126.gif" width="20" height="15" border="0" alt="#126" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5034742">Ваультури</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r2.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>18038024</td><td>10052</td><td>8278</td><td>8</td><td>6</td><td>0</td><td>6</td><td>0</td><td>10</td><td>9</td><td>6</td><td>0</td><td>13419</td><td>8</td><td>8</td><td>0</td><td>4</td><td>0</td><td>7</td><td>0</td><td>3</td><td>0</td><td>7</td><td>4</td><td>0</td><td>2</td><td>0</td><td>0</td><td>22</td><td>52.0</td><td>0</td></tr><tr class="odd"><td>54566</td><td>5123226</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5123226">_spoom_</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r2.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>21-06-22</td><td style="color:333;background: #a1cade">1</td><td>6702557</td><td>4098</td><td>3643</td><td>9</td><td>1</td><td>0</td><td>0</td><td>1</td><td>4</td><td>5</td><td>3</td><td>0</td><td>5819</td><td>6</td><td>5</td><td>0</td><td>0</td><td>0</td><td>3</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>33.0</td><td>0</td></tr><tr class="even"><td>54567</td><td>5218312</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5218312">G&nbsp;E&nbsp;R</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>8997295</td><td>4770</td><td>3876</td><td>1</td><td>2</td><td>9</td><td>0</td><td>3</td><td>0</td><td>1</td><td>0</td><td>0</td><td>5448</td><td>7</td><td>5</td><td>0</td><td>0</td><td>0</td><td>3</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>36.0</td><td>0</td></tr><tr class="odd"><td>54568</td><td>5328973</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5328973">VIVL&nbsp;2&#8209;9</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r9.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>28-03-22</td><td style="color:333;background: #a1cade">1</td><td>6451179</td><td>2876</td><td>2546</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>9</td><td>0</td><td>4407</td><td>6</td><td>5</td><td>0</td><td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>9</td><td>27.0</td><td>-4</td></tr><tr class="even"><td>54569</td><td>5395161</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5395161">горыныч77</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r105.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>27-01-17</td><td style="color:333;background: #a1cade">1</td><td>5904101</td><td>3742</td><td>3209</td><td>0</td><td>0</td><td>0</td><td>9</td><td>2</td><td>3</td><td>2</td><td>2</td><td>0</td><td>3948</td><td>6</td><td>4</td><td>3</td><td>0</td><td>1</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>30.5</td><td>0</td></tr><tr class="odd"><td>54570</td><td>5420287</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=10273"><img src="./knight_files/l_10273.webp" width="20" height="15" border="0" alt="#10273" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5420287">ЗлаяКошка</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r106.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>31-07-24</td><td style="color:333;background: #a1cade">1</td><td>12395789</td><td>5598</td><td>4641</td><td>0</td><td>0</td><td>1</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>8275</td><td>7</td><td>7</td><td>0</td><td>0</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>1</td><td>3</td><td>0</td><td>1</td><td>0</td><td>0</td><td>12</td><td>36.0</td><td>0</td></tr><tr class="even"><td>54571</td><td>5428768</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=12497"><img src="./knight_files/l_12497.gif" width="20" height="15" border="0" alt="#12497" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5428768">Bazaltr</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r2.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>7700058</td><td>6530</td><td>5273</td><td>10</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>3</td><td>2</td><td>7426</td><td>8</td><td>6</td><td>3</td><td>0</td><td>1</td><td>7</td><td>0</td><td>1</td><td>0</td><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>16</td><td>41.5</td><td>0</td></tr><tr class="odd"><td>54572</td><td>5517068</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5517068">Леший&nbsp;777</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>01-12-14</td><td style="color:333;background: #a1cade">1</td><td>11218410</td><td>5437</td><td>4727</td><td>0</td><td>1</td><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>4799</td><td>7</td><td>5</td><td>0</td><td>0</td><td>0</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>34.0</td><td>0</td></tr><tr class="even"><td>54573</td><td>5543853</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5543853">Пламенный&nbsp;воин</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r105.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>05-10-18</td><td style="color:333;background: #a1cade">1</td><td>12109780</td><td>6954</td><td>5545</td><td>0</td><td>0</td><td>5</td><td>8</td><td>9</td><td>0</td><td>7</td><td>7</td><td>0</td><td>8845</td><td>6</td><td>5</td><td>10</td><td>7</td><td>0</td><td>5</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>19</td><td>45.5</td><td>0</td></tr><tr class="odd"><td>54574</td><td>5666300</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5666300">55&nbsp;AA&nbsp;555</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r2.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>09-06-24</td><td style="color:333;background: #a1cade">1</td><td>16990671</td><td>6341</td><td>5109</td><td>10</td><td>1</td><td>5</td><td>1</td><td>1</td><td>1</td><td>5</td><td>1</td><td>0</td><td>7771</td><td>6</td><td>6</td><td>4</td><td>0</td><td>0</td><td>6</td><td>0</td><td>1</td><td>0</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>13</td><td>40.0</td><td>0</td></tr><tr class="even"><td>54575</td><td>5819042</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5819042">darksc</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>12-04-15</td><td style="color:333;background: #a1cade">1</td><td>6840413</td><td>3737</td><td>3467</td><td>0</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>3666</td><td>7</td><td>5</td><td>2</td><td>0</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>29.0</td><td>0</td></tr><tr class="odd"><td>54576</td><td>5883987</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=5883987">&#8209;JIecHuk&#8209;</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>28-05-19</td><td style="color:333;background: #a1cade">1</td><td>7697847</td><td>5030</td><td>3962</td><td>0</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>6866</td><td>6</td><td>5</td><td>1</td><td>5</td><td>0</td><td>3</td><td>1</td><td>1</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>15</td><td>35.5</td><td>0</td></tr><tr class="even"><td>54577</td><td>6191986</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6191986">V_ill_ain</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r7.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>15088037</td><td>6880</td><td>5275</td><td>5</td><td>0</td><td>5</td><td>0</td><td>0</td><td>10</td><td>4</td><td>1</td><td>2</td><td>10513</td><td>7</td><td>7</td><td>8</td><td>7</td><td>0</td><td>5</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>44.5</td><td>0</td></tr><tr class="odd"><td>54578</td><td>6216268</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6216268">Экстрасекс</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>31-12-23</td><td style="color:333;background: #a1cade">1</td><td>10909552</td><td>5471</td><td>4473</td><td>5</td><td>1</td><td>2</td><td>0</td><td>10</td><td>1</td><td>1</td><td>1</td><td>0</td><td>6277</td><td>7</td><td>4</td><td>7</td><td>0</td><td>1</td><td>5</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>12</td><td>37.5</td><td>0</td></tr><tr class="even"><td>54579</td><td>6252590</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6252590">vorov8</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r105.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>11-01-24</td><td style="color:333;background: #a1cade">1</td><td>19182952</td><td>5733</td><td>4767</td><td>0</td><td>0</td><td>0</td><td>10</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>6811</td><td>7</td><td>5</td><td>14</td><td>0</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>35.0</td><td>-13</td></tr><tr class="odd"><td>54580</td><td>6262984</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=9970"><img src="./knight_files/l_9970.gif" width="20" height="15" border="0" alt="#9970" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6262984">Mystic_</a></b>&nbsp;[17]&nbsp;<img src="./knight_files/r108.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>79666789</td><td>24028</td><td>17353</td><td>4</td><td>1</td><td>8</td><td>1</td><td>1</td><td>7</td><td>12</td><td>2</td><td>1</td><td>34176</td><td>9</td><td>10</td><td>8</td><td>8</td><td>0</td><td>10</td><td>3</td><td>3</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>33</td><td>70.5</td><td>0</td></tr><tr class="even"><td>54581</td><td>6404439</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6404439">Emstek</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>15-03-22</td><td style="color:333;background: #a1cade">1</td><td>17452795</td><td>6125</td><td>5146</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>8912</td><td>7</td><td>7</td><td>0</td><td>0</td><td>0</td><td>6</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>14</td><td>37.0</td><td>-8</td></tr><tr class="odd"><td>54582</td><td>6431994</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6431994">A_Breavik</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>07-05-19</td><td style="color:333;background: #a1cade">1</td><td>8598720</td><td>5593</td><td>4617</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>5710</td><td>7</td><td>5</td><td>14</td><td>0</td><td>0</td><td>5</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>12</td><td>35.0</td><td>0</td></tr><tr class="even"><td>54583</td><td>6472503</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6472503">Mailok</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r2.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>14-11-24</td><td style="color:333;background: #a1cade">1</td><td>17523634</td><td>6960</td><td>5471</td><td>11</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>13816</td><td>8</td><td>7</td><td>5</td><td>0</td><td>0</td><td>5</td><td>3</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>16</td><td>48.0</td><td>0</td></tr><tr class="odd"><td>54584</td><td>6488471</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6488471">барбос85</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>31-03-22</td><td style="color:333;background: #a1cade">1</td><td>25717933</td><td>11696</td><td>9080</td><td>0</td><td>0</td><td>0</td><td>4</td><td>6</td><td>1</td><td>11</td><td>5</td><td>0</td><td>12264</td><td>8</td><td>6</td><td>0</td><td>0</td><td>0</td><td>8</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>15</td><td>49.0</td><td>0</td></tr><tr class="even"><td>54585</td><td>6638741</td>
+	<td style="background-color:#ad6161"><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6638741">АрхиМакс</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>17-05-23</td><td style="color:333;background: #a1cade">1</td><td>7605197</td><td>4688</td><td>4300</td><td>1</td><td>1</td><td>9</td><td>1</td><td>6</td><td>1</td><td>3</td><td>1</td><td>0</td><td>5356</td><td>7</td><td>6</td><td>0</td><td>1</td><td>0</td><td>5</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>14</td><td>35.5</td><td>0</td></tr><tr class="odd"><td>54586</td><td>6640619</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=12447"><img src="./knight_files/l_12447.gif" width="20" height="15" border="0" alt="#12447" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6640619">спенцер</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>7732039</td><td>5050</td><td>4104</td><td>2</td><td>2</td><td>3</td><td>0</td><td>10</td><td>5</td><td>0</td><td>4</td><td>0</td><td>7326</td><td>7</td><td>6</td><td>0</td><td>4</td><td>0</td><td>3</td><td>0</td><td>3</td><td>0</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>18</td><td>43.0</td><td>0</td></tr><tr class="even"><td>54587</td><td>6773364</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6773364">Grechn1k</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r1.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>13-06-17</td><td style="color:333;background: #a1cade">1</td><td>5379805</td><td>3646</td><td>3043</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>9</td><td>2</td><td>0</td><td>4540</td><td>6</td><td>4</td><td>1</td><td>0</td><td>0</td><td>4</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td><td>31.0</td><td>0</td></tr><tr class="odd"><td>54588</td><td>6797900</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6797900">Обломок</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r5.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>16-10-23</td><td style="color:333;background: #a1cade">1</td><td>17978357</td><td>8954</td><td>7848</td><td>1</td><td>1</td><td>3</td><td>10</td><td>1</td><td>3</td><td>7</td><td>0</td><td>1</td><td>9915</td><td>8</td><td>5</td><td>2</td><td>0</td><td>1</td><td>8</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>16</td><td>43.5</td><td>0</td></tr><tr class="even"><td>54589</td><td>6809722</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6809722">_Polina_</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r105.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>23-10-24</td><td style="color:333;background: #a1cade">1</td><td>40328946</td><td>10735</td><td>8507</td><td>1</td><td>4</td><td>3</td><td>11</td><td>1</td><td>4</td><td>4</td><td>4</td><td>0</td><td>15232</td><td>9</td><td>6</td><td>0</td><td>7</td><td>0</td><td>8</td><td>1</td><td>1</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>24</td><td>55.5</td><td>0</td></tr><tr class="odd"><td>54590</td><td>6830357</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6830357">Farik001</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r102.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>18-11-24</td><td style="color:333;background: #a1cade">1</td><td>14243945</td><td>4100</td><td>3329</td><td>7</td><td>0</td><td>1</td><td>1</td><td>0</td><td>4</td><td>3</td><td>9</td><td>0</td><td>5275</td><td>7</td><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>3</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>37.0</td><td>0</td></tr><tr class="even"><td>54591</td><td>6854792</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=6854792">__ПризраК__</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r103.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>04-01-18</td><td style="color:333;background: #a1cade">1</td><td>7245540</td><td>3174</td><td>2484</td><td>0</td><td>9</td><td>0</td><td>3</td><td>2</td><td>0</td><td>2</td><td>0</td><td>0</td><td>4362</td><td>6</td><td>4</td><td>8</td><td>0</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>30.0</td><td>0</td></tr><tr class="odd"><td>54592</td><td>7005254</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7005254">1Незабудка1</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r4.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>01-06-19</td><td style="color:333;background: #a1cade">1</td><td>9780208</td><td>5655</td><td>4921</td><td>2</td><td>1</td><td>10</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>7856</td><td>7</td><td>7</td><td>8</td><td>6</td><td>0</td><td>4</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>20</td><td>42.0</td><td>0</td></tr><tr class="even"><td>54593</td><td>7009816</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=11093"><img src="./knight_files/l_11093.webp" width="20" height="15" border="0" alt="#11093" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7009816">Факел&#8209;</a></b>&nbsp;[14]&nbsp;<img src="./knight_files/r5.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>16353303</td><td>9745</td><td>8210</td><td>0</td><td>0</td><td>3</td><td>11</td><td>0</td><td>0</td><td>0</td><td>3</td><td>0</td><td>10177</td><td>9</td><td>7</td><td>17</td><td>0</td><td>0</td><td>9</td><td>0</td><td>1</td><td>0</td><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>18</td><td>49.0</td><td>0</td></tr><tr class="odd"><td>54594</td><td>7028183</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7028183">armakan</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>13577341</td><td>7592</td><td>5904</td><td>0</td><td>0</td><td>2</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>8507</td><td>8</td><td>6</td><td>14</td><td>0</td><td>0</td><td>2</td><td>0</td><td>2</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>14</td><td>38.0</td><td>0</td></tr><tr class="even"><td>54595</td><td>7057760</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7057760">маг&nbsp;яя</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r102.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>09-02-19</td><td style="color:333;background: #a1cade">1</td><td>28727448</td><td>8740</td><td>7390</td><td>11</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>12139</td><td>7</td><td>5</td><td>3</td><td>0</td><td>0</td><td>7</td><td>1</td><td>2</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>14</td><td>44.0</td><td>-6</td></tr><tr class="odd"><td>54596</td><td>7089855</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7089855">Sayott</a></b>&nbsp;[12]&nbsp;<img src="./knight_files/r105.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>25-05-23</td><td style="color:333;background: #a1cade">1</td><td>7736872</td><td>5580</td><td>4971</td><td>1</td><td>4</td><td>2</td><td>10</td><td>4</td><td>1</td><td>0</td><td>0</td><td>1</td><td>6216</td><td>8</td><td>6</td><td>4</td><td>0</td><td>0</td><td>6</td><td>0</td><td>2</td><td>0</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>16</td><td>43.0</td><td>0</td></tr><tr class="even"><td>54597</td><td>7117924</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=10982"><img src="./knight_files/l_10982.gif" width="20" height="15" border="0" alt="#10982" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7117924">dar65</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r105.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>25672207</td><td>14850</td><td>11827</td><td>2</td><td>0</td><td>2</td><td>12</td><td>3</td><td>3</td><td>3</td><td>6</td><td>0</td><td>19463</td><td>10</td><td>8</td><td>0</td><td>0</td><td>0</td><td>5</td><td>0</td><td>2</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>19</td><td>59.5</td><td>0</td></tr><tr class="odd"><td>54598</td><td>7195117</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7195117">Guelf</a></b>&nbsp;[15]&nbsp;<img src="./knight_files/r8.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>04-04-21</td><td style="color:333;background: #a1cade">1</td><td>30118739</td><td>12784</td><td>10818</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>12</td><td>1</td><td>0</td><td>22118</td><td>7</td><td>7</td><td>15</td><td>0</td><td>1</td><td>8</td><td>2</td><td>5</td><td>0</td><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>21</td><td>58.5</td><td>0</td></tr><tr class="even"><td>54599</td><td>7283197</td>
+	<td><b><a target="_blank" href="https://www.heroeswm.ru/clan_info.php?id=12045"><img src="./knight_files/l_12045.gif" width="20" height="15" border="0" alt="#12045" align="absmiddle"></a><img src="./knight_files/transparent.gif" width="2" height="15" alt="" align="absmiddle">
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7283197">IIPUKOJIUCT</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r9.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>18-11-24</td><td style="color:333;background: #a1cade">1</td><td>14069914</td><td>6167</td><td>4772</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>10</td><td>0</td><td>9038</td><td>8</td><td>6</td><td>1</td><td>0</td><td>0</td><td>6</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>15</td><td>39.0</td><td>0</td></tr><tr class="odd"><td>54600</td><td>7323619</td>
+	<td><b>
+	<a target="_blank" href="https://www.heroeswm.ru/pl_info.php?id=7323619">Nightwish80</a></b>&nbsp;[13]&nbsp;<img src="./knight_files/r6.webp" width="15" height="15" border="0" align="absmiddle"></td>
+	<td>19-11-24</td><td style="color:333;background: #a1cade">1</td><td>13828882</td><td>8505</td><td>7265</td><td>0</td><td>0</td><td>1</td><td>0</td><td>11</td><td>0</td><td>1</td><td>0</td><td>0</td><td>11437</td><td>8</td><td>6</td><td>4</td><td>0</td><td>1</td><td>8</td><td>0</td><td>1</td><td>0</td><td>5</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>16</td><td>46.0</td><td>0</td></tr></tbody></table><div class="pages"><table><tbody><tr><td><a href="https://daily.heroeswm.ru/players/o/3/p/1091">«</a></td><td><a href="https://daily.heroeswm.ru/players/o/3">1</a></td><td class="emp">...</td> <td><a href="https://daily.heroeswm.ru/players/o/3/p/1090">1090</a></td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1091">1091</a></td><th>1092</th><td><a href="https://daily.heroeswm.ru/players/o/3/p/1093">1093</a></td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1094">1094</a></td> <td class="emp">...</td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1610">1610</a></td><td><a href="https://daily.heroeswm.ru/players/o/3/p/1093">»</a></td></tr></tbody></table></div></div></center></body></html>

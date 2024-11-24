@@ -1,0 +1,96 @@
+@charset "windows-1251";
+
+#bl-main * A:hover, #bl-main * A:hover * {
+	color: var(--ahover);
+}
+
+#user-dop-menu {
+    border-top: 1px solid var(--border-color);  
+}  
+#add-news {
+    margin: 10px 0px;
+    border: 1px solid var(--border-color);
+}
+    
+.sidebar-header a {
+   text-decoration:none;
+   font-size:var(--minor-size);
+}
+
+/* -- */
+
+	.sidebar-border 
+	{
+		background-color: var(--main-bcolor);
+		border: 1px solid var(--border-color);
+	}
+
+	.sidebar-content a, .sidebar-tooltipe a
+	{
+		font-size: 13px;
+	}
+
+	.text .info SPAN 
+	{
+		margin-right: 15px;
+	}
+
+	#tb-main-c
+	{
+	width: 715px;
+	vertical-align: top;
+	}
+	
+	#tb-main-r
+	{
+	padding-left:15px;	
+	width: 290px;
+	vertical-align: top;
+	}
+	
+	.bl
+	{
+	width: 1020px;
+	}
+	
+	.header_main_mobile
+	{
+	display:none;
+	}
+	
+	.header_logo 
+	{
+		width: 200px;
+	}
+	
+	.sidebar-content 
+	{
+		padding:5px 0px 15px 20px;
+        border-top: 1px solid var(--border-color);
+	}
+	
+	.mobile
+	{ 
+		display:none;
+	}
+    
+    .sidebar-header {
+        padding: 10px 20px;
+		background-color: var(--second-bcolor);
+    }
+	
+	.social
+	{
+		display: inline-block;
+	}
+	
+	#mmd1000
+	{
+		background-color: var(--main-bcolor);
+	}
+	
+	
+	#user-dop-menu
+	{
+		font-size:10px;
+	}

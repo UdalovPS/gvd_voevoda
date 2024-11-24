@@ -793,7 +793,7 @@ class FightEventLogic(Redis):
         try:
             # данные воеводы
             in_data["voevoda_id"] = VoevodaModel.objects.get(pk=in_data["voevoda_id"])
-            in_data["date"] = datetime.datetime.fromtimestamp(in_data["date"] / 1000)
+            in_data["date"] = datetime.datetime.fromtimestamp(in_data["date"])
             in_data["enemy"] = ClansModel.objects.get(pk=in_data["enemy"])
 
             data = FightEventModel.objects.create(**in_data)

@@ -318,20 +318,21 @@
                 <input type="text" id="clanSearchDefense" name="clan_defense" placeholder="Введите не менее 3 символов" list="clanListDefense" autocomplete="off"/>
                 <datalist id="clanListDefense"></datalist>
                 
-                <div class="form-group">
+                <div class="players_wrapper">
+                    <div class="form-group attacker_players">
                     <div class="inline-group">
                         <label>Игроки атаки:</label>
                         <select id="attack_1_pers"></select>
                         <select id="attack_2_pers"></select>
                     </div>
-                
+
                     <div class="inline-group">
                         <label>Пресеты для атаки:</label>
                         <select id="attack_1_pers_preset"></select>
                         <select id="attack_2_pers_preset"></select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group defender_players">
                     <div class="inline-group">
                 <label>Игроки защиты:</label>
                 <select id="defense_1_pers"></select>
@@ -343,6 +344,7 @@
                 <select id="defense_2_pers_preset"></select>
             </div>
         </div>
+                </div>
                 <label for="fight-name">Название боя:</label>
                 <input type="text" id="fight-name" name="name" required>
             
@@ -356,7 +358,10 @@
                 <input type="datetime-local" id="fight-date" name="date" required style="width: 97%;">
             
                 <label for="fight-result">Результат боя:</label>
-                <input type="text" id="fight-result" name="result">
+                <input type="number" id="fight-result" name="result">
+
+                <label for="loss-percent">Процент потерь:</label>
+                <input type="number" id="loss-percent" name="loss_percent">
             
                 <label for="fight-description">Комментарий к бою:</label>
                 <textarea id="fight-description" name="description" style="width: 97%;"></textarea>

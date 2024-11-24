@@ -107,7 +107,7 @@
                                     <span>Дата: </span><p class="event-date">${formattedDate}</p>
                                 </div>
                                 <p>Противник: 
-                                    <a href="https://www.heroeswm.ru/clan_info.php?id=${event.enemy.id}" target="_blank">
+                                    <a href="{% url 'clan' %}?id=${event.enemy.id}" target="_blank">
                                         <img src="${event.enemy.label}">
                                     ${event.enemy.name}
                                 </a> 

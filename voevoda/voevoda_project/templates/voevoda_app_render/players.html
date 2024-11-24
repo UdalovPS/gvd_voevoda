@@ -85,7 +85,7 @@
         <thead>
             <tr>
                 <th>Роль</th>
-                <th>Telegram username</th>
+                <th style="width: 4%; text-wrap: wrap">Telegram username</th>
                 <th>Активность</th>
                 <th>Комментарий</th>
                 <th>Статистика игрока</th>
@@ -139,7 +139,7 @@
                             row.appendChild(telegramCell);
 
                             const activityCell = document.createElement('td');
-                            activityCell.textContent = player.activity ? '✔️' : '❌';
+                            activityCell.innerHTML = player.activity ? '<span style="transform: scale(1.4); display: inline-block;">✔️</span>' : '<span style="transform: scale(1.4); display: inline-block;">❌</span>';
                             row.appendChild(activityCell);
 
                             const commentCell = document.createElement('td');
@@ -149,10 +149,16 @@
                             const statsCell = document.createElement('td');
                             statsCell.innerHTML = `
                                 <a href="https://www.heroeswm.ru/pl_info.php?id=${player.stats.id}" target="_blank">${player.stats.name}</a> (Уровень: ${player.stats.level})<br>
-                                Рыцарь: ${player.stats.umka_knight}, Некромант: ${player.stats.umka_necro}, Маг: ${player.stats.umka_mag},<br>
-                                Эльф: ${player.stats.umka_elf}, Варвар: ${player.stats.umka_barbar}, Тёмный эльф: ${player.stats.umka_black_elf},<br>
-                                Демон: ${player.stats.umka_demon}, Гном: ${player.stats.umka_dwarf}, Степной варвар: ${player.stats.umka_step_barb},<br>
-                                Фараон: ${player.stats.umka_pharaon}
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/fights_icon.png' %}"/>: ${player.stats.umka_knight},
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/elif_files/r2.png' %}"/>: ${player.stats.umka_necro},
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r3.png' %}"/>: ${player.stats.umka_mag},<br>
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/elif_files/r4.png' %}"/>: ${player.stats.umka_elf},
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r5.png' %}"/>: ${player.stats.umka_barbar},
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r8.png' %}"/>: ${player.stats.umka_black_elf},<br>
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r7.png' %}"/>: ${player.stats.umka_demon},
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r103.webp' %}"/>: ${player.stats.umka_dwarf},
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r9.png' %}"/>: ${player.stats.umka_step_barb},<br>
+                                <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/elif_files/r10.png' %}"/>: ${player.stats.umka_pharaon}
                             `;
                             row.appendChild(statsCell);
 
@@ -163,8 +169,8 @@
                                     <a href="{% url 'present' %}?preset_id=${preset.preset.id}">
                                         ${fractionMap[preset.preset.fraction]} - ${preset.preset.name}
                                     </a>
-                                    (${preset.play_preset ? '✔️' : '❌'})<br>
-                                    Описание: ${preset.preset.description}
+                                    (${preset.play_preset ? '<span style="transform: scale(1.4); display: inline-block;">✔️</span>' : '<span style="transform: scale(1.4); display: inline-block;">❌</span>'})<br>
+                                    {#Описание: ${preset.preset.description}#}
                                 </div>
                             `).join('');
                             presetsCell.innerHTML = presetsList;

@@ -146,14 +146,19 @@
                         {% if preset.preset.fraction == 0 %} Фракция: Рыцарь
                         {% elif preset.preset.fraction == 1 %} Фракция: Некромант
                         {% elif preset.preset.fraction == 2 %} Фракция: Маг
-                        {% elif preset.preset.fraction == 3 %} Фракция: Эльф
+                        {% elif preset.preset.fraction == 3 %} Фракция:  Барба
+                        {% elif preset.preset.fraction == 4 %} Фракция: Барба
+                        {% elif preset.preset.fraction == 5 %} Фракция: Темный эльф
+                        {% elif preset.preset.fraction == 7 %} Фракция: Суровый гнум
                         {% endif %}
                     </div>
-                    <div>Название пресета: 
+                    <div style="display: flex; gap: 10px">
+                        <div>Название пресета:
                         <a href="{% url 'present' %}?preset_id={{ preset.id }}">{{ preset.preset.name }}</a>
+                        </div>
+                        <div>Описание: {{ preset.preset.description }}</div>
+                        <div>Активен: {{ preset.play_preset|yesno:"✔,✘" }}</div>
                     </div>
-                    <div>Описание: {{ preset.preset.description }}</div>
-                    <div>Активен: {{ preset.play_preset|yesno:"✔,✘" }}</div>
                 </li>
             {% endfor %}
             </ul>

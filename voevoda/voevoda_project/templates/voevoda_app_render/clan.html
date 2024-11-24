@@ -75,10 +75,21 @@
 
                                     если же переменная {{ my }} равна false, то ничего не делаем
 
-                                },
+                                },0
                         ]
                         Рендерим данные о клане. Рендерим кол-во игроков. Рендерим таблицу с игроками и фильтруем по убывания по
                         переменной level
+
+                        Если в данный по клану alliance не равно null (alliance != null)
+                        то делаем дополнительный запрос
+                        url: http://127.0.0.1:8000/api/players/
+                        type: GET
+                        params:
+                            clan_id=alliance.id
+                            voevoda_id = request.session.voevoda_id
+
+                        Ответ зарендерить как и предыдущие данные и между собой их отделить чтобы было понятно
+                        что данные игроки относятся к другому клану
         -->
         <script>
         const BASE_URL = window.location.origin
@@ -144,17 +155,74 @@
                         <tr>
                                 <td><a href="https://www.heroeswm.ru/pl_info.php?id=${player.id}" target="_blank">${player.name}</a></td>
                                 <td>${player.level}</td>
-                                <td>
-                                Рыцарь: ${player.umka_knight}, Некромант: ${player.umka_necro}, Маг: ${player.umka_mag},
-                                Эльф: ${player.umka_elf}, Варвар: ${player.umka_barbar}, Тёмный эльф: ${player.umka_black_elf},
-                                Демон: ${player.umka_demon}, Гном: ${player.umka_dwarf}, Степной варвар: ${player.umka_step_barb},
-                                Фараон: ${player.umka_pharaon}
+                                <td style="display: flex; gap:6px;">
+                               <span style="display: flex; flex-direction: column">
+                                   <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/fights_icon.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_knight}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/elif_files/r2.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_necro}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r3.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_mag}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/elif_files/r4.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_elf}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r5.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_barbar}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r8.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_black_elf}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r7.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_demon}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r103.webp' %}"/>
+                                    </span>
+                                    <span>${player.umka_dwarf}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/blood-sword_files/r9.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_step_barb}</span>
+                                </span>
+                                <span style="display: flex; flex-direction: column;">
+                                    <span style="display: flex;">
+                                        <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/elif_files/r10.png' %}"/>
+                                    </span>
+                                    <span>${player.umka_pharaon}</span>
+                                </span>
+
                                 </td>
                                 <td>
-                                Охотник: ${player.gild_hunt}, Работяга: ${player.gild_work}, Карточник: ${player.gild_card},
-                                Вор: ${player.gild_thief}, Следопыт: ${player.gild_ranger}, Наёмник: ${player.gild_mers},
-                                Тактик: ${player.gild_tactic}, Страж: ${player.gild_gard}, Искатель: ${player.gild_seekers},
-                                Лидер: ${player.gild_leader}, Кузнец: ${player.gild_blacksmith}, Пушечник: ${player.gild_gunsmith}
+                                	ГО: ${player.gild_hunt}, ГР: ${player.gild_work}, ГК: ${player.gild_card},
+                                ГВ: ${player.gild_thief}, ГРж: ${player.gild_ranger}, ГН: ${player.gild_mers},
+                                ГТ: ${player.gild_tactic}, ГС: ${player.gild_gard}, ГИ: ${player.gild_seekers},
+                                ГЛ: ${player.gild_leader}, Куз: ${player.gild_blacksmith}, Орж: ${player.gild_gunsmith}
                                 </td>
                                 <td>
                                 ${player.person_id == null && my ? 
