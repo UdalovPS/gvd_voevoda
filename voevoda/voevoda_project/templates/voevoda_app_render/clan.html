@@ -92,70 +92,100 @@
                         что данные игроки относятся к другому клану
         -->
         <script>
-        const BASE_URL = window.location.origin
-        const my = {{ my|lower }};
-        const clanId = {{ clan_id }};
-        const voevodaId = "{{ request.session.voevoda_id }}";
-        let clanData = null;
-        let playersData = [];
-
-        fetch(`${BASE_URL}/api/clans/?clan_id=${clanId}`)
-        .then(response => response.json())
-        .then(data => {
-            clanData = data.data;
-            renderClanData();
-        })
-        .catch(error => console.error('Ошибка получения данных клана:', error));
-
-        fetch(`${BASE_URL}/api/players/?clan_id=${clanId}&voevoda_id=${voevodaId}`)
-        .then(response => response.json())
-        .then(data => {
-        console.log('Ответ API для игроков:', data);
-        if (data.success && Array.isArray(data.data)) { 
-                let playersData = data.data.sort((a, b) => b.level - a.level);  
-                document.querySelector('#player-count').textContent = `Количество игроков: ${playersData.length}`;
-                renderPlayersTable(playersData, my); 
-        } else {
-                console.error('Ожидался массив данных игроков, но получен другой тип данных или ошибка');
-        }
-        })
-        .catch(error => console.error('Ошибка получения данных игроков:', error));
-
-        function renderClanData() {
-            if (clanData) {
-                const clanSection = document.getElementById('clan-info');
-                const alliance = clanData.alliance ? `
-                    <div>Союз: <a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.alliance.id}">
-                    <img src="${clanData.alliance.label}" alt="${clanData.alliance.name}"/></a></div>` : '';
-                clanSection.innerHTML = `
-                    <h2>${clanData.name}<a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.id}">
-                        <img src="${clanData.label}" alt="${clanData.name}"></a></h2>
-                    
-                    
-                    ${alliance}
+            const BASE_URL = window.location.origin;
+            const my = {{ my|lower }};
+            const clanId = {{ clan_id }};
+            const voevodaId = "{{ request.session.voevoda_id }}";
+            let clanData = null;
+            let playersData = [];
+            let alliancePlayersData = [];
+        
+            // Запрос данных о клане
+            fetch(`${BASE_URL}/api/clans/?clan_id=${clanId}`)
+                .then(response => response.json())
+                .then(data => {
+                    clanData = data.data;
+                    renderClanData();
+                    // Если у клана есть союз, запросим игроков союзного клана
+                    if (clanData.alliance) {
+                        fetch(`${BASE_URL}/api/players/?clan_id=${clanData.alliance.id}&voevoda_id=${voevodaId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success && Array.isArray(data.data)) {
+                                    alliancePlayersData = data.data.sort((a, b) => b.level - a.level);
+                                    renderPlayersTable(playersData, alliancePlayersData, my);
+                                } else {
+                                    console.error('Ожидался массив данных игроков союзного клана, но получен другой тип данных или ошибка');
+                                }
+                            })
+                            .catch(error => console.error('Ошибка получения данных игроков союзного клана:', error));
+                    }
+                })
+                .catch(error => console.error('Ошибка получения данных клана:', error));
+        
+            // Запрос игроков своего клана
+            fetch(`${BASE_URL}/api/players/?clan_id=${clanId}&voevoda_id=${voevodaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && Array.isArray(data.data)) {
+                        playersData = data.data.sort((a, b) => b.level - a.level);
+                        document.querySelector('#player-count').textContent = `Количество игроков: ${playersData.length}`;
+                        renderPlayersTable(playersData, alliancePlayersData, my); // Отрисовка игроков с учетом союзных игроков
+                    } else {
+                        console.error('Ожидался массив данных игроков, но получен другой тип данных или ошибка');
+                    }
+                })
+                .catch(error => console.error('Ошибка получения данных игроков:', error));
+        
+            // Функция рендеринга информации о клане
+            function renderClanData() {
+                if (clanData) {
+                    const clanSection = document.getElementById('clan-info');
+                    const alliance = clanData.alliance ? `
+                        <div>Союз: <a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.alliance.id}">
+                        <img src="${clanData.alliance.label}" alt="${clanData.alliance.name}"/></a></div>` : '';
+                    clanSection.innerHTML = `
+                        <h2>${clanData.name}<a href="https://www.heroeswm.ru/clan_info.php?id=${clanData.id}">
+                            <img src="${clanData.label}" alt="${clanData.name}"></a></h2>
+                        ${alliance}
+                    `;
+                }
+            }
+        
+            // Функция рендеринга таблицы игроков
+            function renderPlayersTable(playersData, alliancePlayersData, my) {
+                const playersTable = document.getElementById('players-table');
+                playersTable.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Уровень</th>
+                            <th>Фракции</th>
+                            <th>Гильдии</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${playersData.length > 0 ? `
+                            <tr><td colspan="5"><strong>Игроки клана</strong></td></tr>
+                            ${playersData.map(player => renderPlayerRow(player, my)).join('')}
+                        ` : ''}
+                        ${alliancePlayersData.length > 0 ? `
+                            <tr><td colspan="5"><strong>Игроки союзного клана</strong></td></tr>
+                            ${alliancePlayersData.map(player => renderPlayerRow(player, my)).join('')}
+                        ` : ''}
+                    </tbody>
                 `;
             }
-        }
-
-        function renderPlayersTable(playersData, my) {
-            console.log(my);
-            const playersTable = document.getElementById('players-table');
-            playersTable.innerHTML = `
-                <thead>
+        
+            // Функция рендеринга строки игрока
+            function renderPlayerRow(player, my) {
+                return `
                     <tr>
-                        <th>Имя</th>
-                        <th>Уровень</th>
-                        <th>Фракции</th>
-                        <th>Гильдии</th>
-                        <th>Действие</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${playersData.map(player => `
-                        <tr>
-                                <td><a href="https://www.heroeswm.ru/pl_info.php?id=${player.id}" target="_blank">${player.name}</a></td>
-                                <td>${player.level}</td>
-                                <td style="display: flex; gap:6px;">
+                        <td><a href="https://www.heroeswm.ru/pl_info.php?id=${player.id}" target="_blank">${player.name}</a></td>
+                        <td>${player.level}</td>
+                        
+                        <td style="display: flex; gap:6px;">
                                <span style="display: flex; flex-direction: column">
                                    <span style="display: flex;">
                                         <img style="max-width: 25px;" class="fraksiy_icon" src="{% static '/voevoda_app/images/fights_icon.png' %}"/>
@@ -218,41 +248,43 @@
                                 </span>
 
                                 </td>
-                                <td>
-                                	ГО: ${player.gild_hunt}, ГР: ${player.gild_work}, ГК: ${player.gild_card},
-                                ГВ: ${player.gild_thief}, ГРж: ${player.gild_ranger}, ГН: ${player.gild_mers},
-                                ГТ: ${player.gild_tactic}, ГС: ${player.gild_gard}, ГИ: ${player.gild_seekers},
-                                ГЛ: ${player.gild_leader}, Куз: ${player.gild_blacksmith}, Орж: ${player.gild_gunsmith}
-                                </td>
-                                <td>
-                                ${player.person_id == null && my ? 
-                                        `<button class="invite-btn" data-player-id="${player.id}">Пригласить</button>` : ''}
-                                ${player.person_id != null ? 
-                                        `<a href="{% url 'player' %}?player_id=${player.person_id}">Просмотреть</a>` : ''}
-                                </td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            `;
-        }
 
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('invite-btn')) {
-                const playerId = event.target.getAttribute('data-player-id');
-                const voevodaId = "{{ request.session.voevoda_id }}";
-                fetch(`${BASE_URL}/api/keys/?sub_key=person&role=100&player_id=${playerId}&voevoda_id=${voevodaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        alert(`Пригласительный код: ${data.data}`);
-                    } else {
-                        alert('Не удалось получить код приглашения.');
-                    }
-                })
-                .catch(error => console.error('Ошибка получения ключа:', error));
+                        <td>
+                            ГО: ${player.gild_hunt}, ГР: ${player.gild_work}, ГК: ${player.gild_card},
+                            ГВ: ${player.gild_thief}, ГРж: ${player.gild_ranger}, ГН: ${player.gild_mers},
+                            ГТ: ${player.gild_tactic}, ГС: ${player.gild_gard}, ГИ: ${player.gild_seekers},
+                            ГЛ: ${player.gild_leader}, Куз: ${player.gild_blacksmith}, Орж: ${player.gild_gunsmith}
+                        </td>
+                        <td>
+                            ${player.person_id == null && my ? 
+                                `<button class="invite-btn" data-player-id="${player.id}">Пригласить</button>` : ''}
+                            ${player.person_id != null ? 
+                                `<a href="{% url 'player' %}?player_id=${player.person_id}">Просмотреть</a>` : ''}
+                        </td>
+                    </tr>
+                `;
             }
-        });
-    </script>
+        
+            // Обработчик событий для кнопки "Пригласить"
+            document.addEventListener('click', function (event) {
+                if (event.target.classList.contains('invite-btn')) {
+                    const playerId = event.target.getAttribute('data-player-id');
+                    const voevodaId = "{{ request.session.voevoda_id }}";
+                    fetch(`${BASE_URL}/api/keys/?sub_key=person&role=100&player_id=${playerId}&voevoda_id=${voevodaId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data) {
+                                alert(`Пригласительный код: ${data.data}`);
+                            } else {
+                                alert('Не удалось получить код приглашения.');
+                            }
+                        })
+                        .catch(error => console.error('Ошибка получения ключа:', error));
+                }
+            });
+        </script>
+        
+    
     <div class="sh_MenuPanel" style="width: 10px;">
         <div class="mm_l"></div>
         <div class="mm_r"></div>

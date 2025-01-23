@@ -273,11 +273,12 @@
                 <label class="inline-label">Пресет персонажа 2 защиты:
                     <a href="{% url 'present' %}?preset_id={{ fight_data.defence_2_pers_preset.id }}" class="preset-link">{{ fight_data.defence_2_pers_preset.name }}</a>
                 </label>
+                        <!-- Результат боя: выбор 1 или 2 -->
                 <label class="inline-label">Результат боя:
-                <select name="result">
-                    <option value="1" {% if fight_data.result == 1 %}selected{% endif %}>Победа атаки</option>
-                    <option value="2" {% if fight_data.result == 2 %}selected{% endif %}>Победа защиты</option>
-                </select>
+                    <select name="result">
+                        <option value="1" {% if fight_data.result == 1 %}selected{% endif %}>Победа атаки</option>
+                        <option value="2" {% if fight_data.result == 2 %}selected{% endif %}>Победа защиты</option>
+                    </select>
                 </label>
 
                 <label class="inline-label">Описание:
@@ -308,6 +309,7 @@
                 });
             </script>
         {% else %}
+        
         <h2 class="fight-title">Добавить бой</h2>
             <form id="clanForm" class="styled-form">
                 <label>Выберите клан для атаки:</label>
@@ -357,11 +359,17 @@
                 <label for="fight-date">Дата и время боя:</label>
                 <input type="datetime-local" id="fight-date" name="date" required style="width: 97%;">
             
-                <label for="fight-result">Результат боя:</label>
-                <input type="number" id="fight-result" name="result">
+                {% comment %} <label for="fight-result">Результат боя:</label>
+                <input type="number" id="fight-result" name="result"> {% endcomment %}
 
-                <label for="loss-percent">Процент потерь:</label>
-                <input type="number" id="loss-percent" name="loss_percent">
+                <label for="fight-result">Результат боя:</label>
+                <select id="fight-result" name="result" required>
+                    <option value="1">Победа стороны Атаки</option>
+                    <option value="2">Победа стороны Защиты</option>
+                </select>
+
+                <label for="loss_persent">Процент потерь:</label>
+                <input type="number" id="loss_persent" name="loss_persent">
             
                 <label for="fight-description">Комментарий к бою:</label>
                 <textarea id="fight-description" name="description" style="width: 97%;"></textarea>
@@ -382,20 +390,28 @@
                     const query = this.value;
 
                     if (query.length >= 3) {
+                        clearTimeout(clanSearchTimeout);
                         clanSearchTimeout = setTimeout(function () {
                             fetch(`${BASE_URL}/api/clans/?clan_name=${encodeURIComponent(query)}`)
                                 .then(response => response.json())
                                 .then(clans => {
                                     clanList.innerHTML = '';
-                                    clans.data.forEach(clan => {
-                                        const option = document.createElement('option');
-                                        option.value = clan.name;
-                                        option.dataset.id = clan.id;
-                                        clanList.appendChild(option);
-                                    });
-                                });
+                                    
+                                    // Проверка, является ли clans.data массивом
+                                    if (Array.isArray(clans.data)) {
+                                        clans.data.forEach(clan => {
+                                            const option = document.createElement('option');
+                                            option.value = clan.name;
+                                            option.dataset.id = clan.id;
+                                            clanList.appendChild(option);
+                                        });
+                                    } else {
+                                        console.error('Unexpected data format:', clans);
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching clans:', error));
                         }, 500);
-                    }
+                    }                    
                 });
 
                 searchInput.addEventListener('change', function () {
@@ -510,12 +526,15 @@
             searchClan('clanSearchDefense', 'clanListDefense', false);  
 
             document.getElementById('submitFight').addEventListener('click', function () {
+                // Сбор данных боя с проверкой на существование каждого элемента
+                
                 const fightData = {
                     voevoda_id: voevodaId, 
                     name: document.getElementById('fight-name').value,
                     type: document.getElementById('fight-type').value,
-                    date: new Date(document.getElementById('fight-date').value).getTime() / 1000, 
+                    date: new Date(document.getElementById('fight-date').value).getTime() / 1000,
                     description: document.getElementById('fight-description').value,
+                    loss_persent: document.getElementById('loss_persent')?.value,
                     result: document.getElementById('fight-result').value,
                     attack_1_pers: document.getElementById('attack_1_pers').value,
                     attack_2_pers: document.getElementById('attack_2_pers').value,
@@ -526,7 +545,11 @@
                     defence_1_pers_preset: document.getElementById('defense_1_pers_preset').value,
                     defence_2_pers_preset: document.getElementById('defense_2_pers_preset').value
                 };
-
+            
+                // Вывод данных для отладки
+                console.log('Отправляемые данные:', fightData);
+            
+                // Отправка данных на сервер
                 fetch(`${BASE_URL}/api/fights/`, {
                     method: 'POST',
                     headers: {
@@ -535,12 +558,16 @@
                     body: JSON.stringify(fightData)
                 }).then(response => response.json())
                 .then(result => {
+                    console.log('Ответ от сервера:', result);
                     if (result.success) {
                         alert('Бой успешно добавлен!');
                         window.location.href = "{% url 'fights' %}";
                     } else {
-                        alert('Ошибка при добавлении боя.');
+                        alert('Ошибка при добавлении боя: ' + result.message);
                     }
+                }).catch(error => {
+                    console.error('Ошибка при выполнении запроса:', error);
+                    alert('Произошла ошибка при отправке данных.');
                 });
             });
 

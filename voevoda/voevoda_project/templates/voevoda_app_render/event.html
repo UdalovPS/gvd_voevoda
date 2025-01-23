@@ -735,26 +735,28 @@
                     let myPlayers = [];
                     let enemyPlayers = [];
 
-                    function filterPlayers(selectId, selectedLevel, team) {
+                    function filterPlayers(selectId, selectedLevel, team, allies = []) {
                         const selectElement = document.getElementById(selectId);
                         selectElement.innerHTML = '';
-
+                        
                         const playersToFilter = team === 'my' ? myPlayers : enemyPlayers;
-
+                                               
                         playersToFilter.forEach(player => {
-                            const playerName = team === 'my' ? player.stats.name : player.name;
-                            const playerLevel = team === 'my' ? player.stats.level : player.level;
 
-                            if (playerLevel == selectedLevel) {
-                                const optionHtml = `<option value="${player.id}">${playerName} (${playerLevel} уровень)</option>`;
-                                selectElement.insertAdjacentHTML('beforeend', optionHtml);
+                                const playerName = team === 'my' ? player.stats.name : player.name;
+                                const playerLevel = team === 'my' ? player.stats.level : player.level;
+                                const playerClan = team === 'my' ? player.stats.clan.name : player.clan.name;
+                    
+                                if (playerLevel == selectedLevel) {
+                                    const optionHtml = `<option value="${player.id}">${playerClan} - ${playerName} (${playerLevel} уровень)</option>`;
+                                    selectElement.insertAdjacentHTML('beforeend', optionHtml);
                             }
                         });
-
                         if (selectElement.options.length > 0) {
                             selectElement.options[0].selected = true;
                         }
                     }
+                    
 
                     function updateLevelAndPlayers(selectId, team) {
                         const levelSelect = document.getElementById(selectId + '-level');
@@ -773,7 +775,7 @@
                                 const clanContainer = document.getElementById(type + '-clan-info');
 
                                 const clanLink = document.createElement('a');
-                                clanLink.href = `https://www.heroeswm.ru/clan_info.php?id=${data.data.id}`;
+                                clanLink.href = `http://127.0.0.1:8000/clan/?clan_id=${data.data.id}`;
                                 clanLink.target = '_blank';
 
                                 const clanImage = document.createElement('img');
@@ -789,7 +791,7 @@
 
                                 if (data.data.alliance) {
                                     const allianceLink = document.createElement('a');
-                                    allianceLink.href = `https://www.heroeswm.ru/clan_info.php?id=${data.data.alliance.id}`;
+                                    allianceLink.href = `http://127.0.0.1:8000/clan/?clan_id=${data.data.alliance.id}`;
                                     allianceLink.target = '_blank';
 
                                     const allianceImage = document.createElement('img');
@@ -847,36 +849,7 @@
                                         ${invite.person_id.stats.name}
                                     </a>
                                     (${invite.person_id.stats.level} уровень) - ${playerState}
-                                    <div class="player-stats-section">
-                                        <div class="stats-column">
-                                            <h3>Характеристики игрока</h3>
-                                            <div>Рыцарь умка: ${stats.umka_knight || 0}</div>
-                                            <div>Некромант умка: ${stats.umka_necro || 0}</div>
-                                            <div>Маг умка: ${stats.umka_mag || 0}</div>
-                                            <div>Эльф умка: ${stats.umka_elf || 0}</div>
-                                            <div>Варвар умка: ${stats.umka_barbar || 0}</div>
-                                            <div>Темный эльф умка: ${stats.umka_black_elf || 0}</div>
-                                            <div>Демон умка: ${stats.umka_demon || 0}</div>
-                                            <div>Гном умка: ${stats.umka_dwarf || 0}</div>
-                                            <div>Степной варвар умка: ${stats.umka_step_barb || 0}</div>
-                                            <div>Фараон умка: ${stats.umka_pharaon || 0}</div>
-                                        </div>
-                                        <div class="stats-column">
-                                            <h3>Гильдии</h3>
-                                            <div>Гильдия охотников: ${stats.gild_hunt || 0}</div>
-                                            <div>Гильдия рабочих: ${stats.gild_work || 0}</div>
-                                            <div>Гильдия карт: ${stats.gild_card || 0}</div>
-                                            <div>Гильдия воров: ${stats.gild_thief || 0}</div>
-                                            <div>Гильдия следопытов: ${stats.gild_ranger || 0}</div>
-                                            <div>Гильдия наемников: ${stats.gild_mers || 0}</div>
-                                            <div>Гильдия тактиков: ${stats.gild_tactic || 0}</div>
-                                            <div>Гильдия стражей: ${stats.gild_gard || 0}</div>
-                                            <div>Гильдия искателей: ${stats.gild_seekers || 0}</div>
-                                            <div>Гильдия лидеров: ${stats.gild_leader || 0}</div>
-                                            <div>Гильдия кузнецов: ${stats.gild_blacksmith || 0}</div>
-                                            <div>Гильдия оружейников: ${stats.gild_gunsmith || 0}</div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             `;
 
@@ -1168,7 +1141,9 @@
                     })
                 })
                 .then(() => {
-                    window.location.href = "{% url 'fight' %}?event_id=" + eventId;
+                    window.open("{% url 'fight' %}?event_id=" + eventId, '_blank');
+                    window.open("{% url 'fight' %}?event_id=" + eventId + "&tab=2", '_blank');
+                    window.open("{% url 'fight' %}?event_id=" + eventId + "&tab=3", '_blank');
                 });
             });
         </script>
